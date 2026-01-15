@@ -199,3 +199,26 @@ h1, h2, h3 {
 .brightness-200 {
   filter: brightness(2);
 }
+
+/* Install Button */
+.install-btn {
+  padding: 8px 16px;
+  background: var(--castle-gold);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.install-btn:hover {
+  background: #b8922a;
+  transform: scale(1.05);
+}
+
+/* Castle gold color utility */
+.text-castle-gold {
+  color: var(--castle-gold);
+}

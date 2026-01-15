@@ -275,6 +275,7 @@ export default function CheckinPage() {
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
           <p className="text-xs mt-1">Puerto Vallarta, México</p>
+          <p className="text-gray-400 text-xs mt-3">Hecho con ❤️ por <span style={{color: "#C9A227"}}>C0</span> — Colmena 2026</p>
         </div>
       </div>
     </div>

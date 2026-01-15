@@ -106,18 +106,49 @@ export default function CheckinPage() {
     e.preventDefault()
     setStatus('submitting')
 
+    const emailBody = `
+🏠 NUEVO CHECK-IN - CASTLE SOLUTIONS
+
+📍 PROPIEDAD: ${formData.property}
+
+👤 HUÉSPED PRINCIPAL
+Nombre: ${formData.guestName}
+Teléfono: ${formData.phone}
+Email: ${formData.email}
+
+👥 HUÉSPEDES
+Número: ${formData.numGuests}
+Nombres: ${formData.guestNames || 'No especificado'}
+
+📅 FECHAS
+Llegada: ${formData.arrivalDate} a las ${formData.arrivalTime}
+Salida: ${formData.departureDate}
+
+🚗 MÉTODO DE LLEGADA: ${formData.arrivalMethod}
+${formData.flightNumber ? '✈️ Vuelo: ' + formData.flightNumber : ''}
+
+📝 PETICIONES ESPECIALES:
+${formData.specialRequests || 'Ninguna'}
+
+---
+Enviado: ${new Date().toLocaleString('es-MX')}
+    `.trim()
+
     try {
-      const response = await fetch('/api/checkin', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          language: lang,
-          submittedAt: new Date().toISOString()
+          access_key: '1f3be572-2fa2-46a0-b8b5-820679ae7a08',
+          subject: `🏠 Nuevo Check-in: ${formData.property} - ${formData.guestName}`,
+          from_name: 'Castle Solutions Check-in',
+          message: emailBody,
+          replyto: formData.email
         })
       })
 
-      if (response.ok) {
+      const result = await response.json()
+      if (result.success) {
         setStatus('success')
       } else {
         setStatus('error')

@@ -1,71 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const PROPERTIES = [
-  { 
-    id: 'villa-magna-253a', 
-    name: 'Villa Magna 253 A',
-    location: 'Marina Vallarta',
-    beds: 2,
-    baths: 2,
-    guests: 4,
-    image: '🏢'
-  },
-  { 
-    id: 'villa-magna-253b', 
-    name: 'Villa Magna 253 B',
-    location: 'Marina Vallarta',
-    beds: 2,
-    baths: 2,
-    guests: 4,
-    image: '🏢'
-  },
-  { 
-    id: 'nitta-102', 
-    name: 'Nitta 102',
-    location: 'Zona Romántica',
-    beds: 1,
-    baths: 1,
-    guests: 2,
-    image: '🌴'
-  },
-  { 
-    id: 'mismaloya-7202', 
-    name: 'Mismaloya 7202',
-    location: 'Mismaloya',
-    beds: 2,
-    baths: 2,
-    guests: 5,
-    image: '🏖️'
-  },
-  { 
-    id: 'mismaloya-5705', 
-    name: 'Mismaloya 5705',
-    location: 'Mismaloya',
-    beds: 2,
-    baths: 2,
-    guests: 5,
-    image: '🏖️'
-  },
-  { 
-    id: 'avida-408', 
-    name: 'Avida 408',
-    location: 'Fluvial Vallarta',
-    beds: 2,
-    baths: 2,
-    guests: 4,
-    image: '🌺'
-  },
-  { 
-    id: 'cielo-101', 
-    name: 'Cielo 101',
-    location: 'Centro',
-    beds: 1,
-    baths: 1,
-    guests: 3,
-    image: '☁️'
-  },
+  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, image: '🏢' },
+  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, image: '🏢' },
+  { id: 'nitta-102', name: 'Nitta 102', location: 'Zona Romántica', beds: 1, baths: 1, guests: 2, image: '🌴' },
+  { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
+  { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
+  { id: 'avida-408', name: 'Avida 408', location: 'Fluvial Vallarta', beds: 2, baths: 2, guests: 4, image: '🌺' },
+  { id: 'cielo-101', name: 'Cielo 101', location: 'Centro', beds: 1, baths: 1, guests: 3, image: '☁️' },
 ]
 
 const TEXTS = {
@@ -76,7 +20,6 @@ const TEXTS = {
     beds: 'Beds',
     baths: 'Baths',
     guests: 'Guests',
-    viewAll: 'View on Airbnb',
     checkin: 'Guest Check-in',
     checkinDesc: 'Already booked? Complete your registration',
     checkinBtn: 'Go to Check-in',
@@ -86,6 +29,9 @@ const TEXTS = {
     email: 'Email',
     footer: 'Puerto Vallarta, Jalisco, México',
     rights: 'All rights reserved',
+    install: 'Install App',
+    madeWith: 'Made with',
+    by: 'by',
   },
   es: {
     hero: 'Tu Hogar Lejos de Casa',
@@ -94,7 +40,6 @@ const TEXTS = {
     beds: 'Recámaras',
     baths: 'Baños',
     guests: 'Huéspedes',
-    viewAll: 'Ver en Airbnb',
     checkin: 'Registro de Huésped',
     checkinDesc: '¿Ya reservaste? Completa tu registro',
     checkinBtn: 'Ir al Check-in',
@@ -104,12 +49,37 @@ const TEXTS = {
     email: 'Correo',
     footer: 'Puerto Vallarta, Jalisco, México',
     rights: 'Todos los derechos reservados',
+    install: 'Instalar App',
+    madeWith: 'Hecho con',
+    by: 'por',
   }
 }
 
 export default function HomePage() {
   const [lang, setLang] = useState('es')
+  const [deferredPrompt, setDeferredPrompt] = useState(null)
+  const [showInstall, setShowInstall] = useState(false)
   const t = TEXTS[lang]
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+      setShowInstall(true)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return
+    deferredPrompt.prompt()
+    const { outcome } = await deferredPrompt.userChoice
+    if (outcome === 'accepted') {
+      setShowInstall(false)
+    }
+    setDeferredPrompt(null)
+  }
 
   return (
     <div className="min-h-screen">
@@ -117,13 +87,16 @@ export default function HomePage() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <img src="/logo.png" alt="Castle Solutions" className="h-10 md:h-12" />
-          <div className="lang-toggle">
-            <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>
-              🇲🇽
-            </button>
-            <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>
-              🇺🇸
-            </button>
+          <div className="flex items-center gap-3">
+            {showInstall && (
+              <button onClick={handleInstall} className="install-btn">
+                📲 {t.install}
+              </button>
+            )}
+            <div className="lang-toggle">
+              <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>🇲🇽</button>
+              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>🇺🇸</button>
+            </div>
           </div>
         </div>
       </nav>
@@ -138,12 +111,8 @@ export default function HomePage() {
             {t.heroSub}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.2s' }}>
-            <a href="#properties" className="btn-primary inline-block">
-              {t.properties}
-            </a>
-            <a href="/checkin" className="btn-secondary inline-block">
-              {t.checkinBtn}
-            </a>
+            <a href="#properties" className="btn-primary inline-block">{t.properties}</a>
+            <a href="/checkin" className="btn-secondary inline-block">{t.checkinBtn}</a>
           </div>
         </div>
       </section>
@@ -154,21 +123,12 @@ export default function HomePage() {
           <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             {t.properties}
           </h2>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROPERTIES.map((prop, i) => (
-              <div 
-                key={prop.id} 
-                className="property-card fade-in"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <div className="property-image">
-                  <span className="text-5xl">{prop.image}</span>
-                </div>
+              <div key={prop.id} className="property-card fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
                 <div className="p-5">
-                  <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                    {prop.name}
-                  </h3>
+                  <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
                   <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
                   <div className="flex gap-4 text-sm text-gray-600">
                     <span>🛏️ {prop.beds} {t.beds}</span>
@@ -185,40 +145,23 @@ export default function HomePage() {
       {/* Check-in CTA */}
       <section className="py-16 px-4 bg-castle-sand">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            {t.checkin}
-          </h2>
+          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{t.checkin}</h2>
           <p className="text-gray-600 mb-6">{t.checkinDesc}</p>
-          <a href="/checkin" className="btn-primary inline-block">
-            {t.checkinBtn} →
-          </a>
+          <a href="/checkin" className="btn-primary inline-block">{t.checkinBtn} →</a>
         </div>
       </section>
 
       {/* Contact */}
       <section id="contact" className="py-16 px-4 bg-white">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            {t.contact}
-          </h2>
+          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{t.contact}</h2>
           <p className="text-gray-600 mb-8">{t.contactDesc}</p>
-          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="https://wa.me/523221234567" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-btn"
-            >
-              <span className="text-2xl">💬</span>
-              <span>{t.phone}</span>
+            <a href="https://wa.me/523221234567" target="_blank" rel="noopener noreferrer" className="contact-btn">
+              <span className="text-2xl">💬</span><span>{t.phone}</span>
             </a>
-            <a 
-              href="mailto:claudia@castlesolutions.biz"
-              className="contact-btn"
-            >
-              <span className="text-2xl">✉️</span>
-              <span>{t.email}</span>
+            <a href="mailto:claudia@castlesolutions.biz" className="contact-btn">
+              <span className="text-2xl">✉️</span><span>{t.email}</span>
             </a>
           </div>
         </div>
@@ -227,10 +170,13 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="py-8 px-4 bg-castle-dark text-white">
         <div className="max-w-6xl mx-auto text-center">
-          <img src="/logo.png" alt="Castle Solutions" className="h-12 mx-auto mb-4 invert brightness-200" />
+          <img src="/logo.png" alt="Castle Solutions" className="h-12 mx-auto mb-4 brightness-200" style={{ filter: 'brightness(2)' }} />
           <p className="text-gray-400 text-sm mb-2">{t.footer}</p>
-          <p className="text-gray-500 text-xs">
+          <p className="text-gray-500 text-xs mb-4">
             © {new Date().getFullYear()} Castle Solutions. {t.rights}.
+          </p>
+          <p className="text-gray-600 text-xs">
+            {t.madeWith} ❤️ {t.by} <span className="text-castle-gold">C0</span> — Colmena 2026
           </p>
         </div>
       </footer>

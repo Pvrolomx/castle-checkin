@@ -4,7 +4,6 @@ export async function POST(request) {
   try {
     const data = await request.json()
     
-    // Format email content
     const emailBody = `
 🏠 NUEVO CHECK-IN - CASTLE SOLUTIONS
 =====================================
@@ -32,10 +31,8 @@ ${data.specialRequests || 'Ninguna'}
 
 =====================================
 Enviado: ${new Date(data.submittedAt).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}
-Idioma: ${data.language === 'es' ? 'Español' : 'English'}
     `.trim()
 
-    // Send via Resend
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -43,7 +40,7 @@ Idioma: ${data.language === 'es' ? 'Español' : 'English'}
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Castle Solutions <checkin@castlesolutions.biz>',
+        from: 'Castle Solutions <onboarding@resend.dev>',
         to: ['claudia@castlesolutions.biz'],
         subject: `🏠 Nuevo Check-in: ${data.property} - ${data.guestName}`,
         text: emailBody,

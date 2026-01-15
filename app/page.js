@@ -3,268 +3,237 @@
 import { useState } from 'react'
 
 const PROPERTIES = [
-  { id: 'villa-magna-253a', name: 'Villa Magna 253 A' },
-  { id: 'villa-magna-253b', name: 'Villa Magna 253 B' },
-  { id: 'nitta-102', name: 'Nitta 102' },
-  { id: 'mismaloya-7202', name: 'Mismaloya 7202' },
-  { id: 'mismaloya-5705', name: 'Mismaloya 5705' },
-  { id: 'avida-408', name: 'Avida 408' },
-  { id: 'cielo-101', name: 'Cielo 101' },
+  { 
+    id: 'villa-magna-253a', 
+    name: 'Villa Magna 253 A',
+    location: 'Marina Vallarta',
+    beds: 2,
+    baths: 2,
+    guests: 4,
+    image: '🏢'
+  },
+  { 
+    id: 'villa-magna-253b', 
+    name: 'Villa Magna 253 B',
+    location: 'Marina Vallarta',
+    beds: 2,
+    baths: 2,
+    guests: 4,
+    image: '🏢'
+  },
+  { 
+    id: 'nitta-102', 
+    name: 'Nitta 102',
+    location: 'Zona Romántica',
+    beds: 1,
+    baths: 1,
+    guests: 2,
+    image: '🌴'
+  },
+  { 
+    id: 'mismaloya-7202', 
+    name: 'Mismaloya 7202',
+    location: 'Mismaloya',
+    beds: 2,
+    baths: 2,
+    guests: 5,
+    image: '🏖️'
+  },
+  { 
+    id: 'mismaloya-5705', 
+    name: 'Mismaloya 5705',
+    location: 'Mismaloya',
+    beds: 2,
+    baths: 2,
+    guests: 5,
+    image: '🏖️'
+  },
+  { 
+    id: 'avida-408', 
+    name: 'Avida 408',
+    location: 'Fluvial Vallarta',
+    beds: 2,
+    baths: 2,
+    guests: 4,
+    image: '🌺'
+  },
+  { 
+    id: 'cielo-101', 
+    name: 'Cielo 101',
+    location: 'Centro',
+    beds: 1,
+    baths: 1,
+    guests: 3,
+    image: '☁️'
+  },
 ]
-
-const ARRIVAL_METHODS = {
-  en: ['Airplane', 'Car', 'Bus', 'Other'],
-  es: ['Avión', 'Auto', 'Autobús', 'Otro']
-}
 
 const TEXTS = {
   en: {
-    title: 'Guest Check-in',
-    subtitle: 'Welcome! Please complete this form before your arrival',
-    property: 'Select Property',
-    guestName: 'Guest Name',
-    numGuests: 'Number of Guests',
-    guestNames: 'Names of All Guests',
-    guestNamesPlaceholder: 'Please list all guest names',
-    phone: 'Cell Phone',
+    hero: 'Your Home Away From Home',
+    heroSub: 'Premium vacation rentals in Puerto Vallarta',
+    properties: 'Our Properties',
+    beds: 'Beds',
+    baths: 'Baths',
+    guests: 'Guests',
+    viewAll: 'View on Airbnb',
+    checkin: 'Guest Check-in',
+    checkinDesc: 'Already booked? Complete your registration',
+    checkinBtn: 'Go to Check-in',
+    contact: 'Contact Us',
+    contactDesc: 'Questions about our properties?',
+    phone: 'WhatsApp',
     email: 'Email',
-    arrivalDate: 'Arrival Date',
-    arrivalTime: 'Arrival Time',
-    departureDate: 'Departure Date',
-    departureTime: 'Departure Time',
-    arrivalMethod: 'Arrival Method',
-    flightNumber: 'Flight Number',
-    flightPlaceholder: 'e.g. AA1234',
-    specialRequests: 'Special Requests',
-    specialPlaceholder: 'Any special requests or notes...',
-    submit: 'Submit Check-in',
-    submitting: 'Submitting...',
-    success: 'Thank you!',
-    successSub: 'Your check-in has been received. We will contact you shortly with arrival details.',
-    error: 'There was an error. Please try again.',
-    required: 'Required fields',
+    footer: 'Puerto Vallarta, Jalisco, México',
+    rights: 'All rights reserved',
   },
   es: {
-    title: 'Registro de Huésped',
-    subtitle: '¡Bienvenido! Por favor complete este formulario antes de su llegada',
-    property: 'Seleccionar Propiedad',
-    guestName: 'Nombre del Huésped',
-    numGuests: 'Número de Huéspedes',
-    guestNames: 'Nombres de Todos los Huéspedes',
-    guestNamesPlaceholder: 'Por favor liste todos los nombres',
-    phone: 'Teléfono Celular',
-    email: 'Correo Electrónico',
-    arrivalDate: 'Fecha de Llegada',
-    arrivalTime: 'Hora de Llegada',
-    departureDate: 'Fecha de Salida',
-    departureTime: 'Hora de Salida',
-    arrivalMethod: 'Método de Llegada',
-    flightNumber: 'Número de Vuelo',
-    flightPlaceholder: 'ej. AA1234',
-    specialRequests: 'Peticiones Especiales',
-    specialPlaceholder: 'Alguna petición especial o nota...',
-    submit: 'Enviar Registro',
-    submitting: 'Enviando...',
-    success: '¡Gracias!',
-    successSub: 'Su registro ha sido recibido. Nos pondremos en contacto con los detalles de llegada.',
-    error: 'Hubo un error. Por favor intente de nuevo.',
-    required: 'Campos requeridos',
+    hero: 'Tu Hogar Lejos de Casa',
+    heroSub: 'Rentas vacacionales premium en Puerto Vallarta',
+    properties: 'Nuestras Propiedades',
+    beds: 'Recámaras',
+    baths: 'Baños',
+    guests: 'Huéspedes',
+    viewAll: 'Ver en Airbnb',
+    checkin: 'Registro de Huésped',
+    checkinDesc: '¿Ya reservaste? Completa tu registro',
+    checkinBtn: 'Ir al Check-in',
+    contact: 'Contáctanos',
+    contactDesc: '¿Preguntas sobre nuestras propiedades?',
+    phone: 'WhatsApp',
+    email: 'Correo',
+    footer: 'Puerto Vallarta, Jalisco, México',
+    rights: 'Todos los derechos reservados',
   }
 }
 
-export default function CheckinForm() {
+export default function HomePage() {
   const [lang, setLang] = useState('es')
-  const [status, setStatus] = useState('idle')
-  const [formData, setFormData] = useState({
-    property: '',
-    guestName: '',
-    numGuests: '',
-    guestNames: '',
-    phone: '',
-    email: '',
-    arrivalDate: '',
-    arrivalTime: '',
-    departureDate: '',
-    departureTime: '',
-    arrivalMethod: '',
-    flightNumber: '',
-    specialRequests: '',
-  })
-
   const t = TEXTS[lang]
-  const isAirplane = formData.arrivalMethod === 'Airplane' || formData.arrivalMethod === 'Avión'
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setStatus('submitting')
-
-    try {
-      const response = await fetch('/api/checkin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          language: lang,
-          submittedAt: new Date().toISOString()
-        })
-      })
-
-      if (response.ok) {
-        setStatus('success')
-      } else {
-        setStatus('error')
-      }
-    } catch (err) {
-      setStatus('error')
-    }
-  }
-
-  if (status === 'success') {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center fade-in">
-          <div className="mb-6">
-            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-6" />
-          </div>
-          <div className="text-6xl mb-6 text-green-500">✓</div>
-          <h1 className="text-3xl md:text-4xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            {t.success}
-          </h1>
-          <p className="text-gray-600 max-w-md">{t.successSub}</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8 fade-in">
-          <div className="flex justify-center mb-6">
-            <div className="lang-toggle">
-              <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>
-                🇲🇽 Español
-              </button>
-              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>
-                🇺🇸 English
-              </button>
-            </div>
+    <div className="min-h-screen">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <img src="/logo.png" alt="Castle Solutions" className="h-10 md:h-12" />
+          <div className="lang-toggle">
+            <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>
+              🇲🇽
+            </button>
+            <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>
+              🇺🇸
+            </button>
           </div>
-          
-          <div className="mb-6">
-            <img src="/logo.png" alt="Castle Solutions" className="h-20 md:h-24 mx-auto" />
-          </div>
-          
-          <h1 className="text-3xl md:text-4xl font-semibold mb-2" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A' }}>
-            {t.title}
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section className="relative pt-24 pb-20 px-4 hero-gradient">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-semibold mb-4 fade-in" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A' }}>
+            {t.hero}
           </h1>
-          <p className="text-gray-600">{t.subtitle}</p>
+          <p className="text-xl text-gray-600 mb-8 fade-in" style={{ animationDelay: '0.1s' }}>
+            {t.heroSub}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.2s' }}>
+            <a href="#properties" className="btn-primary inline-block">
+              {t.properties}
+            </a>
+            <a href="/checkin" className="btn-secondary inline-block">
+              {t.checkinBtn}
+            </a>
+          </div>
         </div>
+      </section>
 
-        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-10 fade-in" style={{ animationDelay: '0.1s' }}>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            
-            <div>
-              <label className="form-label">{t.property} *</label>
-              <select name="property" value={formData.property} onChange={handleChange} required className="form-input">
-                <option value="">--</option>
-                {PROPERTIES.map(p => (<option key={p.id} value={p.name}>{p.name}</option>))}
-              </select>
-            </div>
-
-            <div>
-              <label className="form-label">{t.guestName} *</label>
-              <input type="text" name="guestName" value={formData.guestName} onChange={handleChange} required className="form-input" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="form-label">{t.numGuests} *</label>
-                <input type="number" name="numGuests" min="1" max="20" value={formData.numGuests} onChange={handleChange} required className="form-input" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="form-label">{t.guestNames}</label>
-                <input type="text" name="guestNames" value={formData.guestNames} onChange={handleChange} placeholder={t.guestNamesPlaceholder} className="form-input" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.phone} *</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="form-input" />
-              </div>
-              <div>
-                <label className="form-label">{t.email} *</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required className="form-input" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.arrivalDate} *</label>
-                <input type="date" name="arrivalDate" value={formData.arrivalDate} onChange={handleChange} required className="form-input" />
-              </div>
-              <div>
-                <label className="form-label">{t.arrivalTime} *</label>
-                <input type="time" name="arrivalTime" value={formData.arrivalTime} onChange={handleChange} required className="form-input" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.departureDate} *</label>
-                <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required className="form-input" />
-              </div>
-              <div>
-                <label className="form-label">{t.departureTime}</label>
-                <input type="time" name="departureTime" value={formData.departureTime} onChange={handleChange} className="form-input" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.arrivalMethod} *</label>
-                <select name="arrivalMethod" value={formData.arrivalMethod} onChange={handleChange} required className="form-input">
-                  <option value="">--</option>
-                  {ARRIVAL_METHODS[lang].map(method => (<option key={method} value={method}>{method}</option>))}
-                </select>
-              </div>
-              
-              {isAirplane && (
-                <div className="fade-in">
-                  <label className="form-label">{t.flightNumber}</label>
-                  <input type="text" name="flightNumber" value={formData.flightNumber} onChange={handleChange} placeholder={t.flightPlaceholder} className="form-input" />
+      {/* Properties */}
+      <section id="properties" className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-semibold text-center mb-12" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            {t.properties}
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {PROPERTIES.map((prop, i) => (
+              <div 
+                key={prop.id} 
+                className="property-card fade-in"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                <div className="property-image">
+                  <span className="text-5xl">{prop.image}</span>
                 </div>
-              )}
-            </div>
-
-            <div>
-              <label className="form-label">{t.specialRequests}</label>
-              <textarea name="specialRequests" value={formData.specialRequests} onChange={handleChange} rows="3" placeholder={t.specialPlaceholder} className="form-input" style={{ resize: 'vertical' }} />
-            </div>
-
-            <div className="pt-4">
-              <button type="submit" disabled={status === 'submitting'} className="btn-primary">
-                {status === 'submitting' ? t.submitting : t.submit}
-              </button>
-              
-              {status === 'error' && (<p className="text-red-500 text-center mt-4">{t.error}</p>)}
-              
-              <p className="text-center text-gray-400 text-xs mt-4">* {t.required}</p>
-            </div>
-          </form>
+                <div className="p-5">
+                  <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                    {prop.name}
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
+                  <div className="flex gap-4 text-sm text-gray-600">
+                    <span>🛏️ {prop.beds} {t.beds}</span>
+                    <span>🚿 {prop.baths} {t.baths}</span>
+                    <span>👥 {prop.guests}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-        <div className="text-center mt-8 text-gray-500 text-sm">
-          <p>Castle Solutions © {new Date().getFullYear()}</p>
-          <p className="text-xs mt-1">Puerto Vallarta, México</p>
+      {/* Check-in CTA */}
+      <section className="py-16 px-4 bg-castle-sand">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            {t.checkin}
+          </h2>
+          <p className="text-gray-600 mb-6">{t.checkinDesc}</p>
+          <a href="/checkin" className="btn-primary inline-block">
+            {t.checkinBtn} →
+          </a>
         </div>
-      </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="py-16 px-4 bg-white">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            {t.contact}
+          </h2>
+          <p className="text-gray-600 mb-8">{t.contactDesc}</p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="https://wa.me/523221234567" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-btn"
+            >
+              <span className="text-2xl">💬</span>
+              <span>{t.phone}</span>
+            </a>
+            <a 
+              href="mailto:claudia@castlesolutions.biz"
+              className="contact-btn"
+            >
+              <span className="text-2xl">✉️</span>
+              <span>{t.email}</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-4 bg-castle-dark text-white">
+        <div className="max-w-6xl mx-auto text-center">
+          <img src="/logo.png" alt="Castle Solutions" className="h-12 mx-auto mb-4 invert brightness-200" />
+          <p className="text-gray-400 text-sm mb-2">{t.footer}</p>
+          <p className="text-gray-500 text-xs">
+            © {new Date().getFullYear()} Castle Solutions. {t.rights}.
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

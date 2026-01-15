@@ -86,13 +86,8 @@ export default function HomePage() {
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <img src="/logo.png" alt="Castle Solutions" className="h-10 md:h-12" />
+          <span className="font-semibold text-gray-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Castle Solutions</span>
           <div className="flex items-center gap-3">
-            {showInstall && (
-              <button onClick={handleInstall} className="install-btn">
-                📲 {t.install}
-              </button>
-            )}
             <div className="lang-toggle">
               <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>🇲🇽</button>
               <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>🇺🇸</button>
@@ -102,18 +97,35 @@ export default function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative pt-24 pb-20 px-4 hero-gradient">
+      <section className="relative pt-28 pb-20 px-4 hero-gradient">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-semibold mb-4 fade-in" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A' }}>
+          {/* Logo grande centrado */}
+          <img 
+            src="/logo.png" 
+            alt="Castle Solutions" 
+            className="h-32 md:h-40 mx-auto mb-8 fade-in drop-shadow-lg"
+          />
+          <h1 className="text-4xl md:text-6xl font-semibold mb-4 fade-in" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A', animationDelay: '0.1s' }}>
             {t.hero}
           </h1>
-          <p className="text-xl text-gray-600 mb-8 fade-in" style={{ animationDelay: '0.1s' }}>
+          <p className="text-xl text-gray-600 mb-8 fade-in" style={{ animationDelay: '0.2s' }}>
             {t.heroSub}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.2s' }}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.3s' }}>
             <a href="#properties" className="btn-primary inline-block">{t.properties}</a>
             <a href="/checkin" className="btn-secondary inline-block">{t.checkinBtn}</a>
           </div>
+          
+          {/* Botón Instalar App prominente */}
+          {showInstall && (
+            <button 
+              onClick={handleInstall} 
+              className="mt-8 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-gray-800 px-6 py-3 rounded-full font-medium transition-all fade-in flex items-center gap-2 mx-auto"
+              style={{ animationDelay: '0.4s' }}
+            >
+              📲 {t.install}
+            </button>
+          )}
         </div>
       </section>
 

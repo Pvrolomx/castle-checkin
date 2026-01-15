@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --castle-gold: #C9A227;
+  --castle-cream: #F5F1E6;
+  --castle-dark: #1A1A1A;
+  --castle-sand: #E8DCC4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, var(--castle-cream) 0%, var(--castle-sand) 100%);
+  min-height: 100vh;
+  color: var(--castle-dark);
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d4c9b0;
+  border-radius: 8px;
+  background: white;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--castle-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.1);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px 32px;
+  background: var(--castle-gold);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #b8922a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.lang-toggle {
+  display: flex;
+  gap: 8px;
+  background: white;
+  padding: 4px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.lang-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.lang-btn.active {
+  background: var(--castle-gold);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}

@@ -40,7 +40,7 @@ Enviado: ${new Date(data.submittedAt).toLocaleString('es-MX', { timeZone: 'Ameri
         access_key: process.env.WEB3FORMS_KEY,
         subject: `🏠 Nuevo Check-in: ${data.property} - ${data.guestName}`,
         from_name: 'Castle Solutions Check-in',
-        to: 'claudia@castlesolutions.biz',
+        to: 'reservations@castlesolutions.biz',
         message: emailContent,
         replyto: data.email
       })

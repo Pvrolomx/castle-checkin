@@ -32,7 +32,7 @@ ${data.specialRequests || 'Ninguna'}
 Enviado: ${new Date(data.submittedAt).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}
     `.trim()
 
-    // Web3Forms
+    // Web3Forms - envía a claudia@castlesolutions.biz
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

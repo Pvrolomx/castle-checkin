@@ -32,28 +32,26 @@ ${data.specialRequests || 'Ninguna'}
 Enviado: ${new Date(data.submittedAt).toLocaleString('es-MX', { timeZone: 'America/Mexico_City' })}
     `.trim()
 
-    // Resend API
-    const res = await fetch('https://api.resend.com/emails', {
+    // Web3Forms
+    const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'Castle Solutions <checkin@resend.dev>',
-        to: ['reservations@castlesolutions.biz'],
+        access_key: process.env.WEB3FORMS_KEY,
         subject: `🏠 Nuevo Check-in: ${data.property} - ${data.guestName}`,
-        text: emailContent,
-        reply_to: data.email
+        from_name: 'Castle Solutions Check-in',
+        to: 'claudia@castlesolutions.biz',
+        message: emailContent,
+        replyto: data.email
       })
     })
 
     const result = await res.json()
     
-    if (res.ok) {
+    if (result.success) {
       return NextResponse.json({ success: true })
     } else {
-      console.error('Resend error:', result)
+      console.error('Web3Forms error:', result)
       return NextResponse.json({ success: false }, { status: 500 })
     }
   } catch (error) {

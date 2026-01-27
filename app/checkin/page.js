@@ -135,16 +135,15 @@ Enviado: ${new Date().toLocaleString('es-MX')}
     `.trim()
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('https://email-service-pvrolomxs-projects.vercel.app/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: '1f3be572-2fa2-46a0-b8b5-820679ae7a08',
           to: 'reservations@castlesolutions.biz',
           subject: `🏠 Nuevo Check-in: ${formData.property} - ${formData.guestName}`,
-          from_name: 'Castle Solutions Check-in',
+          name: 'Castle Solutions Check-in',
           message: emailBody,
-          replyto: formData.email
+          from: formData.email
         })
       })
 

@@ -41,8 +41,12 @@ const TEXTS = {
     specialPlaceholder: 'Any special requests or notes...',
     submit: 'Submit Check-in',
     submitting: 'Submitting...',
-    success: 'Thank you!',
-    successSub: 'Your check-in has been received. We will contact you shortly with arrival details.',
+    successTitle: 'Welcome to Puerto Vallarta!',
+    successSub: 'Your check-in is confirmed. We\'re thrilled to have you!',
+    successProperty: 'Your stay at',
+    successGuide: 'View Your Property Guide',
+    successGuideDesc: 'WiFi, TV, safe, access codes & more — everything you need for your stay',
+    successContact: 'We\'ll contact you shortly with arrival details.',
     error: 'There was an error. Please try again.',
     required: 'Required fields',
   },
@@ -68,8 +72,12 @@ const TEXTS = {
     specialPlaceholder: 'Alguna petición especial o nota...',
     submit: 'Enviar Registro',
     submitting: 'Enviando...',
-    success: '¡Gracias!',
-    successSub: 'Su registro ha sido recibido. Nos pondremos en contacto con los detalles de llegada.',
+    successTitle: '¡Bienvenido(a) a Puerto Vallarta!',
+    successSub: 'Tu registro está confirmado. ¡Nos da mucho gusto tenerte!',
+    successProperty: 'Tu estancia en',
+    successGuide: 'Ver Guía de tu Propiedad',
+    successGuideDesc: 'WiFi, TV, caja fuerte, códigos de acceso y más — todo lo que necesitas para tu estancia',
+    successContact: 'Te contactaremos pronto con los detalles de tu llegada.',
     error: 'Hubo un error. Por favor intente de nuevo.',
     required: 'Campos requeridos',
   }
@@ -96,6 +104,17 @@ export default function CheckinPage() {
 
   const t = TEXTS[lang]
   const isAirplane = formData.arrivalMethod === 'Airplane' || formData.arrivalMethod === 'Avión'
+
+  const getPropertySlug = (propertyName) => {
+    const prop = PROPERTIES.find(p => p.name === propertyName)
+    return prop ? prop.id : ''
+  }
+
+  const getGuideUrl = () => {
+    const slug = getPropertySlug(formData.property)
+    const firstName = formData.guestName.split(' ')[0]
+    return `https://castle-ops.castlesolutions.mx/guide/${slug}?guest=${encodeURIComponent(firstName)}&lang=${lang}`
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -159,17 +178,56 @@ Enviado: ${new Date().toLocaleString('es-MX')}
   }
 
   if (status === 'success') {
+    const firstName = formData.guestName.split(' ')[0]
+    const guideUrl = getGuideUrl()
+
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center fade-in">
+        <div className="text-center fade-in max-w-md mx-auto">
           <div className="mb-6">
-            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-6" />
+            <img src="/logo.png" alt="Castle Solutions" className="h-20 mx-auto mb-6" />
           </div>
-          <div className="text-6xl mb-6 text-green-500">✓</div>
-          <h1 className="text-3xl md:text-4xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            {t.success}
+          
+          {/* Animated checkmark */}
+          <div className="text-6xl mb-4 text-green-500">✓</div>
+          
+          {/* Personalized welcome */}
+          <h1 className="text-3xl md:text-4xl font-semibold mb-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            {lang === 'en' ? `Congratulations, ${firstName}!` : `¡Felicidades, ${firstName}!`}
           </h1>
-          <p className="text-gray-600 max-w-md mb-8">{t.successSub}</p>
+          
+          <p className="text-xl mb-2" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#C9A227' }}>
+            {t.successTitle}
+          </p>
+          
+          <p className="text-gray-600 mb-2">{t.successSub}</p>
+          
+          {/* Property card */}
+          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 my-6 text-white shadow-xl">
+            <div className="text-3xl mb-2">🏰</div>
+            <p className="text-sm text-gray-400 mb-1">{t.successProperty}</p>
+            <p className="text-xl font-semibold" style={{ color: '#C9A227', fontFamily: 'Cormorant Garamond, serif' }}>
+              {formData.property}
+            </p>
+            <div className="mt-2 flex justify-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(201,162,39,0.4)' }}></span>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#C9A227' }}></span>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(201,162,39,0.4)' }}></span>
+            </div>
+          </div>
+          
+          {/* Guide CTA */}
+          <a
+            href={guideUrl}
+            className="block w-full text-center text-white font-semibold py-4 rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-[1.02] mb-3"
+            style={{ backgroundColor: '#C9A227' }}
+          >
+            📖 {t.successGuide}
+          </a>
+          <p className="text-gray-500 text-sm mb-6">{t.successGuideDesc}</p>
+          
+          <p className="text-gray-400 text-sm mb-8">{t.successContact}</p>
+          
           <Link href="/" className="btn-secondary">
             {t.back}
           </Link>
@@ -306,7 +364,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
           <p className="text-xs mt-1">Puerto Vallarta, México</p>
-          <p className="text-gray-400 text-xs mt-3">Hecho con ❤️ por <span style={{color: "#C9A227"}}>C0</span> — Colmena 2026</p>
+          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
         </div>
       </div>
     </div>

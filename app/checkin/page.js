@@ -453,6 +453,28 @@ Enviado: ${new Date().toLocaleString('es-MX')}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
+                <label className="form-label">{t.arrivalDate} *</label>
+                <input type="date" name="arrivalDate" value={formData.arrivalDate} onChange={handleChange} required className="form-input" />
+              </div>
+              <div>
+                <label className="form-label">{t.arrivalTime} *</label>
+                <input type="time" name="arrivalTime" value={formData.arrivalTime} onChange={handleChange} required className="form-input" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="form-label">{t.departureDate} *</label>
+                <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required className="form-input" />
+              </div>
+              <div>
+                <label className="form-label">{t.departureTime}</label>
+                <input type="time" name="departureTime" value={formData.departureTime} onChange={handleChange} className="form-input" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
                 <label className="form-label">{t.arrivalMethod} *</label>
                 <select name="arrivalMethod" value={formData.arrivalMethod} onChange={handleChange} required className="form-input">
                   <option value="">--</option>
@@ -497,28 +519,6 @@ Enviado: ${new Date().toLocaleString('es-MX')}
                 ⚠️ {t.flightNotFound}
               </div>
             )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.arrivalDate} *</label>
-                <input type="date" name="arrivalDate" value={formData.arrivalDate} onChange={handleChange} required className="form-input" />
-              </div>
-              <div>
-                <label className="form-label">{t.arrivalTime} *</label>
-                <input type="time" name="arrivalTime" value={formData.arrivalTime} onChange={handleChange} required className="form-input" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.departureDate} *</label>
-                <input type="date" name="departureDate" value={formData.departureDate} onChange={handleChange} required className="form-input" />
-              </div>
-              <div>
-                <label className="form-label">{t.departureTime}</label>
-                <input type="time" name="departureTime" value={formData.departureTime} onChange={handleChange} className="form-input" />
-              </div>
-            </div>
 
             <div>
               <label className="form-label">{t.specialRequests}</label>

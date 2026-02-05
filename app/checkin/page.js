@@ -347,20 +347,82 @@ Enviado: ${new Date().toLocaleString('es-MX')}
             </div>
           </div>
 
-          {flightData && (
-            <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-100 text-left">
-              <p className="text-sm text-gray-500 mb-1">✈️ {lang === 'en' ? 'Your flight' : 'Tu vuelo'}</p>
-              <p className="font-bold font-mono">{flightData.flight}</p>
-              <p className="text-sm text-gray-600">{flightData.departure.iata} → {flightData.arrival.iata}</p>
+          {/* Flight tracking section */}
+          {flightData ? (
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 mb-6 text-white shadow-lg text-left">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl">✈️</span>
+                  <div>
+                    <p className="text-xs text-gray-400">{lang === 'en' ? 'Your flight' : 'Tu vuelo'}</p>
+                    <p className="font-bold font-mono text-lg">{flightData.flight}</p>
+                  </div>
+                </div>
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                  flightData.status === 'active' ? 'bg-green-500/20 text-green-300' :
+                  flightData.status === 'landed' ? 'bg-blue-500/20 text-blue-300' :
+                  flightData.status === 'delayed' ? 'bg-orange-500/20 text-orange-300' :
+                  'bg-indigo-500/20 text-indigo-300'
+                }`}>
+                  {t.flightStatuses[flightData.status] || flightData.status}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="text-center">
+                  <p className="font-bold text-lg">{flightData.departure.iata}</p>
+                  <p className="text-xs text-gray-400">{formatTime(flightData.departure.scheduled)}</p>
+                </div>
+                <div className="flex-1 relative">
+                  <div className="h-0.5 bg-gray-600 rounded-full">
+                    <div className="h-full rounded-full transition-all duration-1000" style={{
+                      width: `${flightData.progress}%`,
+                      background: 'linear-gradient(90deg, #C4A265, #E8D5A8)'
+                    }} />
+                  </div>
+                  {flightData.status === 'active' && (
+                    <span className="absolute top-1/2 -translate-y-1/2 text-sm" style={{ left: `${flightData.progress}%`, transform: `translateX(-50%) translateY(-50%)` }}>✈️</span>
+                  )}
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-lg">{flightData.arrival.iata}</p>
+                  <p className="text-xs text-gray-400">{formatTime(flightData.arrival.estimated || flightData.arrival.scheduled)}</p>
+                </div>
+              </div>
+              {flightData.arrival.terminal && (
+                <p className="text-xs text-gray-400 mb-2">Terminal {flightData.arrival.terminal}{flightData.arrival.gate ? ` · Gate ${flightData.arrival.gate}` : ''}</p>
+              )}
               <a
                 href={`https://castle-flights.vercel.app?flight=${flightData.flight}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block mt-2 text-sm text-blue-600 underline"
+                className="block w-full text-center py-2.5 rounded-xl text-sm font-medium transition-colors mt-2"
+                style={{ backgroundColor: 'rgba(196,162,101,0.2)', color: '#E8D5A8' }}
               >
                 {t.trackFlight} →
               </a>
             </div>
+          ) : isAirplane && formData.flightNumber ? (
+            <a
+              href={`https://castle-flights.vercel.app?flight=${formData.flightNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-200 hover:border-castle-gold hover:shadow-md transition-all text-center"
+            >
+              <span className="text-2xl block mb-1">✈️</span>
+              <p className="font-medium text-gray-700">{t.trackFlight}</p>
+              <p className="text-sm text-gray-400 font-mono">{formData.flightNumber.toUpperCase()}</p>
+            </a>
+          ) : (
+            <a
+              href="https://castle-flights.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-200 hover:border-castle-gold hover:shadow-md transition-all text-center"
+            >
+              <span className="text-2xl block mb-1">✈️</span>
+              <p className="font-medium text-gray-700">{lang === 'en' ? 'Track Your Flight' : 'Rastrea Tu Vuelo'}</p>
+              <p className="text-xs text-gray-400">{lang === 'en' ? 'Enter your flight number to track it live' : 'Ingresa tu número de vuelo para rastrearlo en vivo'}</p>
+            </a>
           )}
           
           <a

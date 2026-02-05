@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 
 const PROPERTIES = [
@@ -17,6 +17,8 @@ const ARRIVAL_METHODS = {
   en: ['Airplane', 'Car', 'Bus', 'Other'],
   es: ['Avión', 'Auto', 'Autobús', 'Otro']
 }
+
+const FLIGHT_API = 'https://castle-flights.vercel.app/api/flight'
 
 const TEXTS = {
   en: {
@@ -49,6 +51,14 @@ const TEXTS = {
     successContact: 'We\'ll contact you shortly with arrival details.',
     error: 'There was an error. Please try again.',
     required: 'Required fields',
+    flightFound: 'Flight found!',
+    flightNotFound: 'Flight not found. You can still enter details manually.',
+    flightSearching: 'Looking up flight...',
+    flightRoute: 'Route',
+    flightStatus: 'Status',
+    flightETA: 'Estimated arrival',
+    flightStatuses: { scheduled: 'Scheduled', active: 'In Flight', landed: 'Landed', cancelled: 'Cancelled', delayed: 'Delayed', diverted: 'Diverted' },
+    trackFlight: 'Track this flight live',
   },
   es: {
     back: '← Volver al Inicio',
@@ -80,12 +90,87 @@ const TEXTS = {
     successContact: 'Te contactaremos pronto con los detalles de tu llegada.',
     error: 'Hubo un error. Por favor intente de nuevo.',
     required: 'Campos requeridos',
+    flightFound: '¡Vuelo encontrado!',
+    flightNotFound: 'Vuelo no encontrado. Puedes ingresar los datos manualmente.',
+    flightSearching: 'Buscando vuelo...',
+    flightRoute: 'Ruta',
+    flightStatus: 'Estado',
+    flightETA: 'Llegada estimada',
+    flightStatuses: { scheduled: 'Programado', active: 'En Vuelo', landed: 'Aterrizó', cancelled: 'Cancelado', delayed: 'Retrasado', diverted: 'Desviado' },
+    trackFlight: 'Rastrear este vuelo en vivo',
   }
+}
+
+function formatTime(iso) {
+  if (!iso) return '—'
+  const d = new Date(iso)
+  if (isNaN(d)) return '—'
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+}
+
+function formatDateShort(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (isNaN(d)) return ''
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+}
+
+function FlightCard({ flight, t, lang }) {
+  const eta = flight.arrival.estimated || flight.arrival.scheduled
+  const statusLabel = t.flightStatuses[flight.status] || flight.status
+  const statusColors = {
+    scheduled: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+    active: 'bg-green-50 text-green-700 border-green-200',
+    landed: 'bg-blue-50 text-blue-700 border-blue-200',
+    cancelled: 'bg-red-50 text-red-700 border-red-200',
+    delayed: 'bg-orange-50 text-orange-700 border-orange-200',
+    diverted: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+  }
+
+  return (
+    <div className={`rounded-xl border-2 p-4 mt-3 fade-in ${statusColors[flight.status] || 'bg-gray-50 border-gray-200'}`}>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">✈️</span>
+          <span className="font-bold font-mono">{flight.flight}</span>
+          <span className="text-sm opacity-70">{flight.airline}</span>
+        </div>
+        <span className="text-xs font-medium px-2 py-1 rounded-full bg-white/50">
+          {statusLabel}
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <span className="opacity-60">{t.flightRoute}: </span>
+          <span className="font-semibold">{flight.departure.iata} → {flight.arrival.iata}</span>
+        </div>
+        <div>
+          <span className="opacity-60">{t.flightETA}: </span>
+          <span className="font-semibold">{formatDateShort(eta)} {formatTime(eta)}</span>
+        </div>
+      </div>
+      {flight.status === 'active' && (
+        <div className="mt-2 h-1.5 bg-white/50 rounded-full overflow-hidden">
+          <div className="h-full bg-current rounded-full transition-all" style={{ width: `${flight.progress}%`, opacity: 0.6 }} />
+        </div>
+      )}
+      <a
+        href={`https://castle-flights.vercel.app?flight=${flight.flight}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block mt-2 text-xs underline opacity-60 hover:opacity-100"
+      >
+        {t.trackFlight} →
+      </a>
+    </div>
+  )
 }
 
 export default function CheckinPage() {
   const [lang, setLang] = useState('es')
   const [status, setStatus] = useState('idle')
+  const [flightData, setFlightData] = useState(null)
+  const [flightStatus, setFlightStatus] = useState('idle')
   const [formData, setFormData] = useState({
     property: '',
     guestName: '',
@@ -104,6 +189,51 @@ export default function CheckinPage() {
 
   const t = TEXTS[lang]
   const isAirplane = formData.arrivalMethod === 'Airplane' || formData.arrivalMethod === 'Avión'
+
+  const lookupFlight = useCallback(async (flightNum) => {
+    const clean = flightNum.trim().replace(/\s/g, '').toUpperCase()
+    if (clean.length < 3) { setFlightData(null); setFlightStatus('idle'); return }
+    
+    setFlightStatus('searching')
+    try {
+      const res = await fetch(`${FLIGHT_API}?flight=${clean}`)
+      if (res.ok) {
+        const data = await res.json()
+        setFlightData(data)
+        setFlightStatus('found')
+        
+        const eta = data.arrival.estimated || data.arrival.scheduled
+        if (eta) {
+          const d = new Date(eta)
+          if (!isNaN(d)) {
+            const dateStr = d.toISOString().split('T')[0]
+            const timeStr = d.toTimeString().slice(0,5)
+            setFormData(prev => ({
+              ...prev,
+              arrivalDate: prev.arrivalDate || dateStr,
+              arrivalTime: prev.arrivalTime || timeStr,
+            }))
+          }
+        }
+      } else {
+        setFlightData(null)
+        setFlightStatus('not_found')
+      }
+    } catch {
+      setFlightData(null)
+      setFlightStatus('not_found')
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isAirplane || !formData.flightNumber || formData.flightNumber.length < 3) {
+      setFlightData(null)
+      setFlightStatus('idle')
+      return
+    }
+    const timer = setTimeout(() => lookupFlight(formData.flightNumber), 800)
+    return () => clearTimeout(timer)
+  }, [formData.flightNumber, isAirplane, lookupFlight])
 
   const getPropertySlug = (propertyName) => {
     const prop = PROPERTIES.find(p => p.name === propertyName)
@@ -125,6 +255,10 @@ export default function CheckinPage() {
     e.preventDefault()
     setStatus('submitting')
 
+    const flightInfo = flightData
+      ? `\n✈️ VUELO VERIFICADO: ${flightData.flight}\n   Ruta: ${flightData.departure.iata} → ${flightData.arrival.iata}\n   Status: ${flightData.status}\n   ETA: ${flightData.arrival.estimated || flightData.arrival.scheduled || 'N/A'}\n   Fuente: ${flightData.source}\n   🔗 Track: https://castle-flights.vercel.app?flight=${flightData.flight}`
+      : ''
+
     const emailBody = `
 🏠 NUEVO CHECK-IN - CASTLE SOLUTIONS
 
@@ -144,7 +278,7 @@ Llegada: ${formData.arrivalDate} a las ${formData.arrivalTime}
 Salida: ${formData.departureDate}
 
 🚗 MÉTODO DE LLEGADA: ${formData.arrivalMethod}
-${formData.flightNumber ? '✈️ Vuelo: ' + formData.flightNumber : ''}
+${formData.flightNumber ? '✈️ Vuelo: ' + formData.flightNumber : ''}${flightInfo}
 
 📝 PETICIONES ESPECIALES:
 ${formData.specialRequests || 'Ninguna'}
@@ -159,7 +293,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: 'reservations@castlesolutions.biz',
-          subject: `🏠 Nuevo Check-in: ${formData.property} - ${formData.guestName}`,
+          subject: `🏠 Nuevo Check-in: ${formData.property} - ${formData.guestName}${flightData ? ' ✈️' + flightData.flight : ''}`,
           name: 'Castle Solutions Check-in',
           message: emailBody,
           from: formData.email
@@ -188,10 +322,8 @@ Enviado: ${new Date().toLocaleString('es-MX')}
             <img src="/logo.png" alt="Castle Solutions" className="h-20 mx-auto mb-6" />
           </div>
           
-          {/* Animated checkmark */}
           <div className="text-6xl mb-4 text-green-500">✓</div>
           
-          {/* Personalized welcome */}
           <h1 className="text-3xl md:text-4xl font-semibold mb-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             {lang === 'en' ? `Congratulations, ${firstName}!` : `¡Felicidades, ${firstName}!`}
           </h1>
@@ -202,7 +334,6 @@ Enviado: ${new Date().toLocaleString('es-MX')}
           
           <p className="text-gray-600 mb-2">{t.successSub}</p>
           
-          {/* Property card */}
           <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 my-6 text-white shadow-xl">
             <div className="text-3xl mb-2">🏰</div>
             <p className="text-sm text-gray-400 mb-1">{t.successProperty}</p>
@@ -215,8 +346,23 @@ Enviado: ${new Date().toLocaleString('es-MX')}
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'rgba(201,162,39,0.4)' }}></span>
             </div>
           </div>
+
+          {flightData && (
+            <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-100 text-left">
+              <p className="text-sm text-gray-500 mb-1">✈️ {lang === 'en' ? 'Your flight' : 'Tu vuelo'}</p>
+              <p className="font-bold font-mono">{flightData.flight}</p>
+              <p className="text-sm text-gray-600">{flightData.departure.iata} → {flightData.arrival.iata}</p>
+              <a
+                href={`https://castle-flights.vercel.app?flight=${flightData.flight}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-2 text-sm text-blue-600 underline"
+              >
+                {t.trackFlight} →
+              </a>
+            </div>
+          )}
           
-          {/* Guide CTA */}
           <a
             href={guideUrl}
             className="block w-full text-center text-white font-semibold py-4 rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-[1.02] mb-3"
@@ -307,6 +453,53 @@ Enviado: ${new Date().toLocaleString('es-MX')}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
+                <label className="form-label">{t.arrivalMethod} *</label>
+                <select name="arrivalMethod" value={formData.arrivalMethod} onChange={handleChange} required className="form-input">
+                  <option value="">--</option>
+                  {ARRIVAL_METHODS[lang].map(method => (<option key={method} value={method}>{method}</option>))}
+                </select>
+              </div>
+              
+              {isAirplane && (
+                <div className="fade-in">
+                  <label className="form-label">{t.flightNumber}</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="flightNumber"
+                      value={formData.flightNumber}
+                      onChange={handleChange}
+                      placeholder={t.flightPlaceholder}
+                      className="form-input font-mono"
+                    />
+                    {flightStatus === 'searching' && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 animate-pulse">🔍</span>
+                    )}
+                    {flightStatus === 'found' && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-green-500">✅</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Flight validation card */}
+            {isAirplane && flightStatus === 'searching' && (
+              <div className="bg-gray-50 rounded-xl p-3 text-center text-sm text-gray-500 animate-pulse">
+                🔍 {t.flightSearching}
+              </div>
+            )}
+            {isAirplane && flightStatus === 'found' && flightData && (
+              <FlightCard flight={flightData} t={t} lang={lang} />
+            )}
+            {isAirplane && flightStatus === 'not_found' && formData.flightNumber.length >= 3 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 text-center text-sm text-yellow-700">
+                ⚠️ {t.flightNotFound}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
                 <label className="form-label">{t.arrivalDate} *</label>
                 <input type="date" name="arrivalDate" value={formData.arrivalDate} onChange={handleChange} required className="form-input" />
               </div>
@@ -325,23 +518,6 @@ Enviado: ${new Date().toLocaleString('es-MX')}
                 <label className="form-label">{t.departureTime}</label>
                 <input type="time" name="departureTime" value={formData.departureTime} onChange={handleChange} className="form-input" />
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="form-label">{t.arrivalMethod} *</label>
-                <select name="arrivalMethod" value={formData.arrivalMethod} onChange={handleChange} required className="form-input">
-                  <option value="">--</option>
-                  {ARRIVAL_METHODS[lang].map(method => (<option key={method} value={method}>{method}</option>))}
-                </select>
-              </div>
-              
-              {isAirplane && (
-                <div className="fade-in">
-                  <label className="form-label">{t.flightNumber}</label>
-                  <input type="text" name="flightNumber" value={formData.flightNumber} onChange={handleChange} placeholder={t.flightPlaceholder} className="form-input" />
-                </div>
-              )}
             </div>
 
             <div>

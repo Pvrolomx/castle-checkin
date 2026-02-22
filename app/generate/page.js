@@ -108,6 +108,12 @@ export default function GeneratePage() {
               →
             </button>
           </form>
+
+          <div className="mt-8">
+            <Link href="/" className="text-white/30 hover:text-white/60 transition-colors text-sm">
+              ← Volver al inicio
+            </Link>
+          </div>
         </div>
       </div>
     )

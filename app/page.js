@@ -101,6 +101,17 @@ const GALLERY = {
     '/gallery/avida-408-bedroom.jpg',
     '/gallery/avida-408-rooftop.jpg',
   ],
+  'cielo-101': [
+    '/gallery/cielo-101-pool.jpg',
+    '/gallery/cielo-101-pool-view.jpg',
+    '/gallery/cielo-101-living.jpg',
+    '/gallery/cielo-101-living2.jpg',
+    '/gallery/cielo-101-bedroom1.jpg',
+    '/gallery/cielo-101-bedroom2.jpg',
+    '/gallery/cielo-101-bedroom3.jpg',
+    '/gallery/cielo-101-building.jpg',
+    '/gallery/cielo-101-laundry.jpg',
+  ],
 }
 
 const PROPERTIES = [

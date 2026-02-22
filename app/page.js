@@ -35,12 +35,24 @@ const GALLERY = {
     '/gallery/mismaloya-5705-bedroom.jpg',
     '/gallery/mismaloya-5705-pool-aerial.jpg',
   ],
+  'villa-magna-336': [
+    '/gallery/villa-magna-336-balcony-bbq.jpg',
+    '/gallery/villa-magna-336-balcony2.jpg',
+    '/gallery/villa-magna-336-hallway.jpg',
+    '/gallery/villa-magna-336-kitchen.jpg',
+    '/gallery/villa-magna-336-kitchen2.jpg',
+    '/gallery/villa-magna-336-bedroom1.jpg',
+    '/gallery/villa-magna-336-bedroom1-detail.jpg',
+    '/gallery/villa-magna-336-bedroom2.jpg',
+    '/gallery/villa-magna-336-bunkbed.jpg',
+    '/gallery/villa-magna-336-bathroom.jpg',
+  ],
 }
 
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253a.jpg' },
   { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
-  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Nayarit', beds: 3, baths: 3, guests: 6, image: '🏖️' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Nayarit', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-336.jpg' },
   { id: 'estrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, image: '⭐' },
   { id: 'casita-1', name: 'Casita 1', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },
   { id: 'casita-2', name: 'Casita 2', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },

@@ -69,6 +69,19 @@ const GALLERY = {
     '/gallery/casita-1-pool.jpg',
     '/gallery/casita-1-laundry.jpg',
   ],
+  'casita-2': [
+    '/gallery/casita-2-loft.jpg',
+    '/gallery/casita-2-living.jpg',
+    '/gallery/casita-2-living2.jpg',
+    '/gallery/casita-2-patio-pool.jpg',
+    '/gallery/casita-2-kitchen.jpg',
+    '/gallery/casita-2-bedroom.jpg',
+    '/gallery/casita-2-bedroom2.jpg',
+    '/gallery/casita-2-bedroom-view.jpg',
+    '/gallery/casita-2-bedroom3.jpg',
+    '/gallery/casita-2-pool.jpg',
+    '/gallery/casita-2-laundry.jpg',
+  ],
 }
 
 const PROPERTIES = [

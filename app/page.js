@@ -1,6 +1,41 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+
+const GALLERY = {
+  'villa-magna-253a': [
+    '/gallery/villa-magna-253a-living.jpg',
+    '/gallery/villa-magna-253a-dining.jpg',
+    '/gallery/villa-magna-253a-bedroom.jpg',
+    '/gallery/villa-magna-253a-bedroom2.jpg',
+    '/gallery/villa-magna-253a-kitchen.jpg',
+    '/gallery/villa-magna-253a-bathroom.jpg',
+    '/gallery/villa-magna-253a-balcony.jpg',
+    '/gallery/villa-magna-253a-laundry.jpg',
+    '/gallery/villa-magna-253a-pool-beach.jpg',
+  ],
+  'mismaloya-7202': [
+    '/gallery/mismaloya-7202-bay-view.jpg',
+    '/gallery/mismaloya-7202-living.jpg',
+    '/gallery/mismaloya-7202-living2.jpg',
+    '/gallery/mismaloya-7202-dining.jpg',
+    '/gallery/mismaloya-7202-kitchen.jpg',
+    '/gallery/mismaloya-7202-kitchen2.jpg',
+    '/gallery/mismaloya-7202-bedroom.jpg',
+    '/gallery/mismaloya-7202-bathroom.jpg',
+    '/gallery/mismaloya-7202-pool.jpg',
+    '/gallery/mismaloya-7202-gym.jpg',
+    '/gallery/mismaloya-7202-courtyard.jpg',
+  ],
+  'mismaloya-5705': [
+    '/gallery/mismaloya-5705-balcony.jpg',
+    '/gallery/mismaloya-5705-living.jpg',
+    '/gallery/mismaloya-5705-dining.jpg',
+    '/gallery/mismaloya-5705-kitchen.jpg',
+    '/gallery/mismaloya-5705-bedroom.jpg',
+    '/gallery/mismaloya-5705-pool-aerial.jpg',
+  ],
+}
 
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
@@ -36,6 +71,8 @@ const TEXTS = {
     install: 'Install App',
     madeWith: 'Made with',
     by: 'by',
+    photos: 'photos',
+    viewGallery: 'View Gallery',
   },
   es: {
     hero: 'Tu Hogar Lejos de Casa',
@@ -56,13 +93,108 @@ const TEXTS = {
     install: 'Instalar App',
     madeWith: 'Hecho con',
     by: 'por',
+    photos: 'fotos',
+    viewGallery: 'Ver Galería',
   }
+}
+
+function GalleryModal({ images, propertyName, onClose, startIndex = 0 }) {
+  const [current, setCurrent] = useState(startIndex)
+
+  const next = useCallback(() => setCurrent(i => (i + 1) % images.length), [images.length])
+  const prev = useCallback(() => setCurrent(i => (i - 1 + images.length) % images.length), [images.length])
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prev()
+    }
+    window.addEventListener('keydown', handler)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', handler)
+      document.body.style.overflow = ''
+    }
+  }, [onClose, next, prev])
+
+  let touchStartX = 0
+  const onTouchStart = (e) => { touchStartX = e.touches[0].clientX }
+  const onTouchEnd = (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? next() : prev()
+    }
+  }
+
+  return (
+    <div 
+      className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+      onClick={onClose}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 text-white" onClick={e => e.stopPropagation()}>
+        <h3 className="text-lg font-medium truncate" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{propertyName}</h3>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-gray-400">{current + 1} / {images.length}</span>
+          <button onClick={onClose} className="text-white text-2xl hover:text-gray-300 transition-colors w-10 h-10 flex items-center justify-center">&times;</button>
+        </div>
+      </div>
+
+      {/* Image */}
+      <div 
+        className={"flex-1 flex items-center justify-center px-4 relative"}
+        onClick={e => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <button 
+          onClick={prev} 
+          className="absolute left-2 md:left-6 text-white/70 hover:text-white text-4xl z-10 w-12 h-12 flex items-center justify-center bg-black/30 rounded-full backdrop-blur-sm transition-all"
+        >
+          ‹
+        </button>
+        
+        <img
+          src={images[current]}
+          alt={`${propertyName} ${current + 1}`}
+          className="max-h-[80vh] max-w-full object-contain rounded-lg shadow-2xl"
+          style={{ transition: 'opacity 0.2s' }}
+        />
+        
+        <button 
+          onClick={next} 
+          className="absolute right-2 md:right-6 text-white/70 hover:text-white text-4xl z-10 w-12 h-12 flex items-center justify-center bg-black/30 rounded-full backdrop-blur-sm transition-all"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Thumbnails */}
+      <div className={"px-4 py-3 overflow-x-auto"} onClick={e => e.stopPropagation()}>
+        <div className="flex gap-2 justify-center">
+          {images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`flex-shrink-0 w-16 h-12 md:w-20 md:h-14 rounded-md overflow-hidden border-2 transition-all ${
+                i === current ? 'border-white opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-75'
+              }`}
+            >
+              <img src={img} alt="" className="w-full h-full object-cover" />
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function HomePage() {
   const [lang, setLang] = useState('es')
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
+  const [galleryOpen, setGalleryOpen] = useState(null)
   const t = TEXTS[lang]
 
   useEffect(() => {
@@ -85,8 +217,23 @@ export default function HomePage() {
     setDeferredPrompt(null)
   }
 
+  const openGallery = (propId, propName) => {
+    if (GALLERY[propId]) {
+      setGalleryOpen({ id: propId, name: propName, images: GALLERY[propId] })
+    }
+  }
+
   return (
     <div className="min-h-screen">
+      {/* Gallery Modal */}
+      {galleryOpen && (
+        <GalleryModal
+          images={galleryOpen.images}
+          propertyName={galleryOpen.name}
+          onClose={() => setGalleryOpen(null)}
+        />
+      )}
+
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -138,24 +285,38 @@ export default function HomePage() {
             {t.properties}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROPERTIES.map((prop, i) => (
-              <div key={prop.id} className="property-card fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
-                {prop.photo ? (
-                  <div className="property-image" style={{ backgroundImage: `url(${prop.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-                ) : (
-                  <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
-                )}
-                <div className="p-5">
-                  <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
-                  <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
-                  <div className="flex gap-4 text-sm text-gray-600">
-                    <span>🛏️ {prop.beds} {t.beds}</span>
-                    <span>🚿 {prop.baths} {t.baths}</span>
-                    <span>👥 {prop.guests}</span>
+            {PROPERTIES.map((prop, i) => {
+              const hasGallery = !!GALLERY[prop.id]
+              return (
+                <div 
+                  key={prop.id} 
+                  className={`property-card fade-in ${hasGallery ? 'cursor-pointer' : ''}`}
+                  style={{ animationDelay: `${i * 0.1}s` }}
+                  onClick={() => hasGallery && openGallery(prop.id, prop.name)}
+                >
+                  {prop.photo ? (
+                    <div className="property-image relative" style={{ backgroundImage: `url(${prop.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                      {hasGallery && (
+                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center gap-1">
+                          📷 {GALLERY[prop.id].length} {t.photos}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
+                  )}
+                  <div className="p-5">
+                    <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
+                    <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
+                    <div className="flex gap-4 text-sm text-gray-600">
+                      <span>🛏️ {prop.beds} {t.beds}</span>
+                      <span>🚿 {prop.baths} {t.baths}</span>
+                      <span>👥 {prop.guests}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>

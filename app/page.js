@@ -60,6 +60,15 @@ const GALLERY = {
     '/gallery/estrella-502-pool-sunset.jpg',
     '/gallery/estrella-502-gym.jpg',
   ],
+  'casita-1': [
+    '/gallery/casita-1-living.jpg',
+    '/gallery/casita-1-loft.jpg',
+    '/gallery/casita-1-bedroom.jpg',
+    '/gallery/casita-1-bathroom.jpg',
+    '/gallery/casita-1-bathroom2.jpg',
+    '/gallery/casita-1-pool.jpg',
+    '/gallery/casita-1-laundry.jpg',
+  ],
 }
 
 const PROPERTIES = [

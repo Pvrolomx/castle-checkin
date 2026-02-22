@@ -91,6 +91,16 @@ const GALLERY = {
     '/gallery/nitta-102-balcony.jpg',
     '/gallery/nitta-102-balcony2.jpg',
   ],
+  'avida-408': [
+    '/gallery/avida-408-living.jpg',
+    '/gallery/avida-408-living-sunset.jpg',
+    '/gallery/avida-408-panoramic.jpg',
+    '/gallery/avida-408-kitchen-bar.jpg',
+    '/gallery/avida-408-kitchen.jpg',
+    '/gallery/avida-408-kitchen2.jpg',
+    '/gallery/avida-408-bedroom.jpg',
+    '/gallery/avida-408-rooftop.jpg',
+  ],
 }
 
 const PROPERTIES = [

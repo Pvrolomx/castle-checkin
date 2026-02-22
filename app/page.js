@@ -5,11 +5,15 @@ import { useState, useEffect } from 'react'
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, image: '🏢' },
   { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, image: '🏢' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Nayarit', beds: 3, baths: 3, guests: 6, image: '🏖️' },
+  { id: 'estrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, image: '⭐' },
+  { id: 'casita-1', name: 'Casita 1', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },
+  { id: 'casita-2', name: 'Casita 2', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },
   { id: 'nitta-102', name: 'Nitta 102', location: 'Zona Romántica', beds: 1, baths: 1, guests: 2, image: '🌴' },
   { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
   { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
-  { id: 'avida-408', name: 'Avida 408', location: 'Fluvial Vallarta', beds: 2, baths: 2, guests: 4, image: '🌺' },
-  { id: 'cielo-101', name: 'Cielo 101', location: 'Centro', beds: 1, baths: 1, guests: 3, image: '☁️' },
+  { id: 'avida-408', name: 'Avida 408', location: 'Fluvial Vallarta', beds: 2, baths: 2, guests: 3, image: '🌺' },
+  { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, image: '☁️' },
 ]
 
 const TEXTS = {
@@ -99,7 +103,6 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative pt-28 pb-20 px-4 hero-gradient">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Logo grande centrado */}
           <img 
             src="/logo.png" 
             alt="Castle Solutions" 
@@ -116,7 +119,6 @@ export default function HomePage() {
             <a href="/checkin" className="btn-secondary inline-block">{t.checkinBtn}</a>
           </div>
           
-          {/* Botón Instalar App prominente */}
           {showInstall && (
             <button 
               onClick={handleInstall} 
@@ -188,7 +190,7 @@ export default function HomePage() {
             © {new Date().getFullYear()} Castle Solutions. {t.rights}.
           </p>
           <p className="text-gray-600 text-xs">
-            {t.madeWith} ❤️ {t.by} <span className="text-castle-gold">C0</span> — Colmena 2026
+            {t.madeWith} ❤️ {t.by} <span className="text-castle-gold">duendes.app</span> 2026
           </p>
         </div>
       </footer>

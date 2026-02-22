@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A' },
@@ -30,6 +32,7 @@ const TEXTS = {
     title: 'Guest Check-in',
     subtitle: 'Welcome! Please complete this form before your arrival',
     property: 'Select Property',
+    propertyLabel: 'Property',
     guestName: 'Guest Name',
     numGuests: 'Number of Guests',
     guestNames: 'Names of All Guests',
@@ -63,12 +66,17 @@ const TEXTS = {
     flightETA: 'Estimated arrival',
     flightStatuses: { scheduled: 'Scheduled', active: 'In Flight', landed: 'Landed', cancelled: 'Cancelled', delayed: 'Delayed', diverted: 'Diverted' },
     trackFlight: 'Track this flight live',
+    noToken: 'You need a check-in link to access this page.',
+    noTokenSub: 'Please contact Castle Solutions to receive your personalized check-in link.',
+    contactWhatsApp: 'Contact us on WhatsApp',
+    invalidToken: 'This check-in link is invalid or expired.',
   },
   es: {
     back: '← Volver al Inicio',
     title: 'Registro de Huésped',
     subtitle: '¡Bienvenido! Por favor complete este formulario antes de su llegada',
     property: 'Seleccionar Propiedad',
+    propertyLabel: 'Propiedad',
     guestName: 'Nombre del Huésped',
     numGuests: 'Número de Huéspedes',
     guestNames: 'Nombres de Todos los Huéspedes',
@@ -102,7 +110,44 @@ const TEXTS = {
     flightETA: 'Llegada estimada',
     flightStatuses: { scheduled: 'Programado', active: 'En Vuelo', landed: 'Aterrizó', cancelled: 'Cancelado', delayed: 'Retrasado', diverted: 'Desviado' },
     trackFlight: 'Rastrear este vuelo en vivo',
+    noToken: 'Necesitas un enlace de check-in para acceder a esta página.',
+    noTokenSub: 'Contacta a Castle Solutions para recibir tu enlace personalizado de check-in.',
+    contactWhatsApp: 'Contáctanos por WhatsApp',
+    invalidToken: 'Este enlace de check-in es inválido o ha expirado.',
   }
+}
+
+// Decode check-in token from URL
+function decodeCheckinToken(tokenStr) {
+  try {
+    const decoded = atob(tokenStr)
+    const data = JSON.parse(decoded)
+    // Validate required fields
+    if (!data.p) return null
+    // Find matching property
+    const property = PROPERTIES.find(prop => prop.id === data.p)
+    if (!property) return null
+    return {
+      propertyId: data.p,
+      propertyName: property.name,
+      email: data.e || '',
+      guestName: data.n || '',
+      arrival: data.a || '',
+      departure: data.d || '',
+    }
+  } catch {
+    return null
+  }
+}
+
+// Generate a check-in token (utility for admin use)
+function encodeCheckinToken({ propertyId, email, guestName, arrival, departure }) {
+  const data = { p: propertyId }
+  if (email) data.e = email
+  if (guestName) data.n = guestName
+  if (arrival) data.a = arrival
+  if (departure) data.d = departure
+  return btoa(JSON.stringify(data))
 }
 
 function formatTime(iso) {
@@ -170,11 +215,73 @@ function FlightCard({ flight, t, lang }) {
   )
 }
 
-export default function CheckinPage() {
+// No-token screen
+function NoTokenScreen({ lang }) {
+  const t = TEXTS[lang]
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="text-center fade-in max-w-md mx-auto">
+        <div className="mb-6">
+          <img src="/logo.png" alt="Castle Solutions" className="h-20 mx-auto mb-6" />
+        </div>
+        
+        <div className="text-6xl mb-4">🔒</div>
+        
+        <h1 className="text-2xl md:text-3xl font-semibold mb-3" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A' }}>
+          {t.noToken}
+        </h1>
+        
+        <p className="text-gray-600 mb-8">{t.noTokenSub}</p>
+        
+        <a
+          href="https://wa.me/523221234567"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-[1.02]"
+          style={{ backgroundColor: '#25D366' }}
+        >
+          💬 {t.contactWhatsApp}
+        </a>
+
+        <div className="mt-6">
+          <div className="flex justify-center mb-4">
+            <div className="lang-toggle">
+              <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => window.location.search = ''}>
+                🇲🇽 Español
+              </button>
+              <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => window.location.search = ''}>
+                🇺🇸 English
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <Link href="/" className="text-gray-500 hover:text-castle-gold transition-colors text-sm">
+            {t.back}
+          </Link>
+        </div>
+        
+        <div className="text-center mt-8 text-gray-500 text-sm">
+          <p>Castle Solutions © {new Date().getFullYear()}</p>
+          <p className="text-xs mt-1">Puerto Vallarta, México</p>
+          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function CheckinForm() {
+  const searchParams = useSearchParams()
+  const tokenStr = searchParams.get('t')
+  
   const [lang, setLang] = useState('es')
   const [status, setStatus] = useState('idle')
   const [flightData, setFlightData] = useState(null)
   const [flightStatus, setFlightStatus] = useState('idle')
+  const [tokenData, setTokenData] = useState(null)
+  const [tokenChecked, setTokenChecked] = useState(false)
   const [formData, setFormData] = useState({
     property: '',
     guestName: '',
@@ -190,6 +297,25 @@ export default function CheckinPage() {
     flightNumber: '',
     specialRequests: '',
   })
+
+  // Decode token on mount
+  useEffect(() => {
+    if (tokenStr) {
+      const decoded = decodeCheckinToken(tokenStr)
+      if (decoded) {
+        setTokenData(decoded)
+        setFormData(prev => ({
+          ...prev,
+          property: decoded.propertyName,
+          guestName: decoded.guestName || prev.guestName,
+          email: decoded.email || prev.email,
+          arrivalDate: decoded.arrival || prev.arrivalDate,
+          departureDate: decoded.departure || prev.departureDate,
+        }))
+      }
+    }
+    setTokenChecked(true)
+  }, [tokenStr])
 
   const t = TEXTS[lang]
   const isAirplane = formData.arrivalMethod === 'Airplane' || formData.arrivalMethod === 'Avión'
@@ -313,6 +439,56 @@ Enviado: ${new Date().toLocaleString('es-MX')}
     } catch (err) {
       setStatus('error')
     }
+  }
+
+  // Loading state while checking token
+  if (!tokenChecked) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-gray-400">Loading...</div>
+      </div>
+    )
+  }
+
+  // No token provided — block access
+  if (!tokenStr) {
+    return <NoTokenScreen lang={lang} />
+  }
+
+  // Invalid token
+  if (tokenStr && !tokenData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center fade-in max-w-md mx-auto">
+          <div className="mb-6">
+            <img src="/logo.png" alt="Castle Solutions" className="h-20 mx-auto mb-6" />
+          </div>
+          <div className="text-6xl mb-4">⚠️</div>
+          <h1 className="text-2xl md:text-3xl font-semibold mb-3" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#1A1A1A' }}>
+            {t.invalidToken}
+          </h1>
+          <p className="text-gray-600 mb-8">{t.noTokenSub}</p>
+          <a
+            href="https://wa.me/523221234567"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-[1.02]"
+            style={{ backgroundColor: '#25D366' }}
+          >
+            💬 {t.contactWhatsApp}
+          </a>
+          <div className="mt-8">
+            <Link href="/" className="text-gray-500 hover:text-castle-gold transition-colors text-sm">
+              {t.back}
+            </Link>
+          </div>
+          <div className="text-center mt-8 text-gray-500 text-sm">
+            <p>Castle Solutions © {new Date().getFullYear()}</p>
+            <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (status === 'success') {
@@ -482,12 +658,14 @@ Enviado: ${new Date().toLocaleString('es-MX')}
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-10 fade-in" style={{ animationDelay: '0.1s' }}>
           <form onSubmit={handleSubmit} className="space-y-6">
             
+            {/* Property — locked from token, shown as read-only */}
             <div>
-              <label className="form-label">{t.property} *</label>
-              <select name="property" value={formData.property} onChange={handleChange} required className="form-input">
-                <option value="">--</option>
-                {PROPERTIES.map(p => (<option key={p.id} value={p.name}>{p.name}</option>))}
-              </select>
+              <label className="form-label">{t.propertyLabel} *</label>
+              <div className="form-input bg-gray-50 flex items-center gap-2" style={{ cursor: 'default' }}>
+                <span>🏰</span>
+                <span className="font-semibold">{tokenData.propertyName}</span>
+              </div>
+              <input type="hidden" name="property" value={formData.property} />
             </div>
 
             <div>
@@ -610,5 +788,17 @@ Enviado: ${new Date().toLocaleString('es-MX')}
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CheckinPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-gray-400">Loading...</div>
+      </div>
+    }>
+      <CheckinForm />
+    </Suspense>
   )
 }

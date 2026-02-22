@@ -82,6 +82,15 @@ const GALLERY = {
     '/gallery/casita-2-pool.jpg',
     '/gallery/casita-2-laundry.jpg',
   ],
+  'nitta-102': [
+    '/gallery/nitta-102-kitchen.jpg',
+    '/gallery/nitta-102-kitchen2.jpg',
+    '/gallery/nitta-102-dining.jpg',
+    '/gallery/nitta-102-living.jpg',
+    '/gallery/nitta-102-bedroom.jpg',
+    '/gallery/nitta-102-balcony.jpg',
+    '/gallery/nitta-102-balcony2.jpg',
+  ],
 }
 
 const PROPERTIES = [

@@ -38,8 +38,8 @@ const GALLERY = {
 }
 
 const PROPERTIES = [
-  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
-  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253a.jpg' },
+  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253a.jpg' },
+  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
   { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Nayarit', beds: 3, baths: 3, guests: 6, image: '🏖️' },
   { id: 'estrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, image: '⭐' },
   { id: 'casita-1', name: 'Casita 1', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },

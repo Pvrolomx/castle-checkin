@@ -19,13 +19,8 @@ const PROPERTIES = [
   { id: 'cielo-101', name: 'Cielo 101', zone: 'Alta Vista' },
 ]
 
-function encodeToken({ propertyId, email, guestName, arrival, departure }) {
-  const data = { p: propertyId }
-  if (email) data.e = email
-  if (guestName) data.n = guestName
-  if (arrival) data.a = arrival
-  if (departure) data.d = departure
-  return btoa(JSON.stringify(data))
+function encodeToken(propertyId) {
+  return btoa(JSON.stringify({ p: propertyId }))
 }
 
 export default function GeneratePage() {
@@ -33,13 +28,8 @@ export default function GeneratePage() {
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState('')
-  const [guestName, setGuestName] = useState('')
-  const [email, setEmail] = useState('')
-  const [arrival, setArrival] = useState('')
-  const [departure, setDeparture] = useState('')
   const [generatedLink, setGeneratedLink] = useState('')
   const [copied, setCopied] = useState(false)
-  const [whatsappNumber, setWhatsappNumber] = useState('')
 
   const handlePin = (e) => {
     e.preventDefault()
@@ -52,17 +42,9 @@ export default function GeneratePage() {
     }
   }
 
-  const handleGenerate = (e) => {
-    e.preventDefault()
-    if (!selectedProperty) return
-
-    const token = encodeToken({
-      propertyId: selectedProperty,
-      email,
-      guestName,
-      arrival,
-      departure,
-    })
+  const handleGenerate = (propertyId) => {
+    setSelectedProperty(propertyId)
+    const token = encodeToken(propertyId)
     const link = `https://castlesolutions.mx/checkin?t=${token}`
     setGeneratedLink(link)
     setCopied(false)
@@ -74,7 +56,6 @@ export default function GeneratePage() {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback
       const ta = document.createElement('textarea')
       ta.value = generatedLink
       document.body.appendChild(ta)
@@ -89,30 +70,11 @@ export default function GeneratePage() {
   const handleShareWhatsApp = () => {
     const prop = PROPERTIES.find(p => p.id === selectedProperty)
     const propName = prop ? prop.name : ''
-    const name = guestName ? ` ${guestName}` : ''
-    const dates = arrival && departure ? `\n📅 ${arrival} → ${departure}` : ''
     
-    const message = `🏰 Castle Solutions Check-in\n\nHola${name}! Aquí está tu enlace de check-in para ${propName}:${dates}\n\n👉 ${generatedLink}\n\nPor favor completa el formulario antes de tu llegada. ¡Te esperamos en Puerto Vallarta! 🌴`
+    const message = `🏰 Castle Solutions\n\nHere is your check-in link for ${propName}:\n\n👉 ${generatedLink}\n\nPlease complete the form before your arrival. We look forward to welcoming you to Puerto Vallarta! 🌴\n\n---\n\n🏰 Castle Solutions\n\nAquí está tu enlace de check-in para ${propName}:\n\n👉 ${generatedLink}\n\nPor favor completa el formulario antes de tu llegada. ¡Te esperamos en Puerto Vallarta! 🌴`
     
     const encodedMsg = encodeURIComponent(message)
-    const cleanNumber = whatsappNumber.replace(/\D/g, '')
-    
-    if (cleanNumber) {
-      window.open(`https://wa.me/${cleanNumber}?text=${encodedMsg}`, '_blank')
-    } else {
-      window.open(`https://wa.me/?text=${encodedMsg}`, '_blank')
-    }
-  }
-
-  const handleReset = () => {
-    setSelectedProperty('')
-    setGuestName('')
-    setEmail('')
-    setArrival('')
-    setDeparture('')
-    setGeneratedLink('')
-    setCopied(false)
-    setWhatsappNumber('')
+    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank')
   }
 
   // PIN screen
@@ -151,7 +113,7 @@ export default function GeneratePage() {
     )
   }
 
-  // Admin panel
+  // Admin panel — property grid
   return (
     <div className="min-h-screen py-8 px-4" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
       <div className="max-w-lg mx-auto">
@@ -161,104 +123,37 @@ export default function GeneratePage() {
           <h1 className="text-2xl font-semibold text-white" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Generar Link de Check-in
           </h1>
-          <p className="text-white/50 text-sm mt-1">Crea enlaces personalizados para huéspedes</p>
+          <p className="text-white/50 text-sm mt-1">Selecciona la propiedad del huésped</p>
         </div>
 
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 fade-in" style={{ animationDelay: '0.1s' }}>
-          <form onSubmit={handleGenerate} className="space-y-5">
-            
-            {/* Property selector */}
-            <div>
-              <label className="block text-white/70 text-sm mb-1.5">Propiedad *</label>
-              <select
-                value={selectedProperty}
-                onChange={(e) => setSelectedProperty(e.target.value)}
-                required
-                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-amber-400/50 appearance-none"
-              >
-                <option value="" className="bg-gray-800">Seleccionar propiedad...</option>
-                {PROPERTIES.map(p => (
-                  <option key={p.id} value={p.id} className="bg-gray-800">
-                    {p.name} — {p.zone}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Guest name */}
-            <div>
-              <label className="block text-white/70 text-sm mb-1.5">Nombre del huésped</label>
-              <input
-                type="text"
-                value={guestName}
-                onChange={(e) => setGuestName(e.target.value)}
-                placeholder="John Smith"
-                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-400/50"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-white/70 text-sm mb-1.5">Email del huésped</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="guest@email.com"
-                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-400/50"
-              />
-            </div>
-
-            {/* Dates */}
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-white/70 text-sm mb-1.5">Llegada</label>
-                <input
-                  type="date"
-                  value={arrival}
-                  onChange={(e) => setArrival(e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-amber-400/50"
-                />
-              </div>
-              <div>
-                <label className="block text-white/70 text-sm mb-1.5">Salida</label>
-                <input
-                  type="date"
-                  value={departure}
-                  onChange={(e) => setDeparture(e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-amber-400/50"
-                />
-              </div>
-            </div>
-
-            {/* WhatsApp number for direct share */}
-            <div>
-              <label className="block text-white/70 text-sm mb-1.5">WhatsApp del huésped (opcional)</label>
-              <input
-                type="tel"
-                value={whatsappNumber}
-                onChange={(e) => setWhatsappNumber(e.target.value)}
-                placeholder="+1 555 123 4567"
-                className="w-full bg-white/10 border border-white/20 rounded-xl py-3 px-4 text-white placeholder-white/30 focus:outline-none focus:border-amber-400/50"
-              />
-              <p className="text-white/30 text-xs mt-1">Si lo incluyes, el botón de WhatsApp abre chat directo con el huésped</p>
-            </div>
-
+        {/* Property grid */}
+        <div className="space-y-2 fade-in" style={{ animationDelay: '0.1s' }}>
+          {PROPERTIES.map(p => (
             <button
-              type="submit"
-              className="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[1.02] hover:shadow-lg"
-              style={{ background: 'linear-gradient(135deg, #C9A227, #E8D5A8)', color: '#1a1a2e' }}
+              key={p.id}
+              onClick={() => handleGenerate(p.id)}
+              className={`w-full text-left px-4 py-3 rounded-xl border transition-all hover:scale-[1.01] ${
+                selectedProperty === p.id 
+                  ? 'bg-amber-400/20 border-amber-400/50 text-white' 
+                  : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20'
+              }`}
             >
-              🔗 Generar Link
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="font-medium">{p.name}</span>
+                  <span className="text-white/40 text-sm ml-2">— {p.zone}</span>
+                </div>
+                {selectedProperty === p.id && (
+                  <span className="text-amber-400 text-sm">✓</span>
+                )}
+              </div>
             </button>
-          </form>
+          ))}
         </div>
 
         {/* Generated link result */}
         {generatedLink && (
           <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-amber-400/30 fade-in">
-            <p className="text-white/70 text-sm mb-2">Link generado:</p>
-            
             <div className="bg-black/30 rounded-xl p-3 mb-4 break-all">
               <p className="text-amber-300 text-sm font-mono">{generatedLink}</p>
             </div>
@@ -281,16 +176,9 @@ export default function GeneratePage() {
                 className="py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.02]"
                 style={{ backgroundColor: '#25D366' }}
               >
-                💬 Enviar WhatsApp
+                💬 WhatsApp
               </button>
             </div>
-
-            <button
-              onClick={handleReset}
-              className="w-full mt-3 py-2 text-white/40 hover:text-white/70 text-sm transition-colors"
-            >
-              Generar otro link →
-            </button>
           </div>
         )}
 

@@ -10,8 +10,8 @@ const PROPERTIES = [
   { id: 'casita-1', name: 'Casita 1', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },
   { id: 'casita-2', name: 'Casita 2', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, image: '🏠' },
   { id: 'nitta-102', name: 'Nitta 102', location: 'Zona Romántica', beds: 1, baths: 1, guests: 2, image: '🌴' },
-  { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
-  { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, image: '🏖️' },
+  { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, photo: '/properties/mismaloya-7202.jpg' },
+  { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, photo: '/properties/mismaloya-5705.jpg' },
   { id: 'avida-408', name: 'Avida 408', location: 'Fluvial Vallarta', beds: 2, baths: 2, guests: 3, image: '🌺' },
   { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, image: '☁️' },
 ]
@@ -140,7 +140,11 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROPERTIES.map((prop, i) => (
               <div key={prop.id} className="property-card fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
+                {prop.photo ? (
+                  <div className="property-image" style={{ backgroundImage: `url(${prop.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                ) : (
+                  <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
+                )}
                 <div className="p-5">
                   <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
                   <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>

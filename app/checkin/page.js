@@ -265,7 +265,7 @@ function NoTokenScreen({ lang }) {
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
           <p className="text-xs mt-1">Puerto Vallarta, México</p>
-          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
+          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> <a href="/generate" style={{color:"inherit",textDecoration:"none"}}>2026</a></p>
         </div>
       </div>
     </div>
@@ -484,7 +484,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
           </div>
           <div className="text-center mt-8 text-gray-500 text-sm">
             <p>Castle Solutions © {new Date().getFullYear()}</p>
-            <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
+            <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> <a href="/generate" style={{color:"inherit",textDecoration:"none"}}>2026</a></p>
           </div>
         </div>
       </div>
@@ -784,7 +784,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
         <div className="text-center mt-8 text-gray-500 text-sm">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
           <p className="text-xs mt-1">Puerto Vallarta, México</p>
-          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> 2026</p>
+          <p className="text-gray-400 text-xs mt-3">Hecho por <span style={{color: "#C9A227"}}>duendes.app</span> <a href="/generate" style={{color:"inherit",textDecoration:"none"}}>2026</a></p>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const ADMIN_PIN = '2026'
+const ADMIN_PIN = '1978'
 
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A', zone: 'Marina Vallarta' },
@@ -141,7 +141,7 @@ export default function GeneratePage() {
               <div className="flex items-center justify-between">
                 <div>
                   <span className="font-medium">{p.name}</span>
-                  <span className="text-white/40 text-sm ml-2">— {p.zone}</span>
+                  
                 </div>
                 {selectedProperty === p.id && (
                   <span className="text-amber-400 text-sm">✓</span>

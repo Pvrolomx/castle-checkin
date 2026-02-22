@@ -80,10 +80,10 @@ export default function GeneratePage() {
   // PIN screen
   if (!authenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#F5F1E6' }}>
         <div className="text-center fade-in max-w-sm mx-auto">
           <div className="mb-8">
-            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-80" />
+            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-100" />
           </div>
           
           <form onSubmit={handlePin} className="space-y-4">
@@ -96,21 +96,21 @@ export default function GeneratePage() {
               onChange={(e) => { setPin(e.target.value); setPinError(false) }}
               placeholder="PIN"
               autoFocus
-              className="w-32 mx-auto block text-center text-2xl tracking-[0.5em] bg-white/10 border border-white/20 rounded-xl py-3 text-white placeholder-white/30 focus:outline-none focus:border-amber-400/50"
+              className="w-32 mx-auto block text-center text-2xl tracking-[0.5em] bg-white border border-gray-300 rounded-xl py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-amber-500"
             />
             {pinError && (
-              <p className="text-red-400 text-sm fade-in">PIN incorrecto</p>
+              <p className="text-red-500 text-sm fade-in">PIN incorrecto</p>
             )}
             <button
               type="submit"
-              className="text-white/40 hover:text-white/70 text-sm transition-colors"
+              className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
             >
               →
             </button>
           </form>
 
           <div className="mt-8">
-            <Link href="/" className="text-white/30 hover:text-white/60 transition-colors text-sm">
+            <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors text-sm">
               ← Volver al inicio
             </Link>
           </div>
@@ -121,15 +121,15 @@ export default function GeneratePage() {
 
   // Admin panel — property grid
   return (
-    <div className="min-h-screen py-8 px-4" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+    <div className="min-h-screen py-8 px-4" style={{ background: '#F5F1E6' }}>
       <div className="max-w-lg mx-auto">
         
         <div className="text-center mb-8 fade-in">
-          <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-80" />
-          <h1 className="text-2xl font-semibold text-white" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+          <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-100" />
+          <h1 className="text-2xl font-semibold text-gray-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Generar Link de Check-in
           </h1>
-          <p className="text-white/50 text-sm mt-1">Selecciona la propiedad del huésped</p>
+          <p className="text-gray-500 text-sm mt-1">Selecciona la propiedad del huésped</p>
         </div>
 
         {/* Property grid */}
@@ -140,17 +140,17 @@ export default function GeneratePage() {
               onClick={() => handleGenerate(p.id)}
               className={`w-full text-left px-4 py-3 rounded-xl border transition-all hover:scale-[1.01] ${
                 selectedProperty === p.id 
-                  ? 'bg-amber-400/20 border-amber-400/50 text-white' 
-                  : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:border-white/20'
+                  ? 'bg-amber-50 border-amber-400 text-gray-800' 
+                  : 'bg-white border-gray-200 text-gray-700 hover:bg-amber-50/50 hover:border-amber-300'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-medium">{p.name}</span>
+                  <span className="font-medium text-gray-800">{p.name}</span>
                   
                 </div>
                 {selectedProperty === p.id && (
-                  <span className="text-amber-400 text-sm">✓</span>
+                  <span className="text-amber-600 text-sm">✓</span>
                 )}
               </div>
             </button>
@@ -159,9 +159,9 @@ export default function GeneratePage() {
 
         {/* Generated link result */}
         {generatedLink && (
-          <div className="mt-6 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-amber-400/30 fade-in">
-            <div className="bg-black/30 rounded-xl p-3 mb-4 break-all">
-              <p className="text-amber-300 text-sm font-mono">{generatedLink}</p>
+          <div className="mt-6 bg-white rounded-2xl p-6 border border-amber-300 shadow-lg fade-in">
+            <div className="bg-gray-50 rounded-xl p-3 mb-4 break-all">
+              <p className="text-amber-700 text-sm font-mono">{generatedLink}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -169,9 +169,9 @@ export default function GeneratePage() {
                 onClick={handleCopy}
                 className="py-3 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02]"
                 style={{ 
-                  backgroundColor: copied ? 'rgba(34,197,94,0.2)' : 'rgba(255,255,255,0.1)', 
-                  color: copied ? '#22c55e' : 'white',
-                  border: `1px solid ${copied ? 'rgba(34,197,94,0.3)' : 'rgba(255,255,255,0.2)'}`
+                  backgroundColor: copied ? 'rgba(34,197,94,0.2)' : 'rgba(0,0,0,0.05)', 
+                  color: copied ? '#22c55e' : '#374151',
+                  border: `1px solid ${copied ? 'rgba(34,197,94,0.3)' : 'rgba(0,0,0,0.1)'}`
                 }}
               >
                 {copied ? '✅ Copiado!' : '📋 Copiar'}
@@ -189,14 +189,14 @@ export default function GeneratePage() {
         )}
 
         <div className="text-center mt-8">
-          <Link href="/" className="text-white/30 hover:text-white/60 transition-colors text-sm">
+          <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors text-sm">
             ← Volver al inicio
           </Link>
         </div>
 
-        <div className="text-center mt-4 text-white/20 text-xs">
+        <div className="text-center mt-4 text-gray-400 text-xs">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
-          <p className="mt-1">Hecho por <span style={{color: 'rgba(201,162,39,0.5)'}}>duendes.app</span> 2026</p>
+          <p className="mt-1">Hecho por <span style={{color: '#C9A227'}}>duendes.app</span> 2026</p>
         </div>
       </div>
     </div>

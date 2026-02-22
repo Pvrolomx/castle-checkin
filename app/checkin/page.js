@@ -6,6 +6,10 @@ import Link from 'next/link'
 const PROPERTIES = [
   { id: 'villa-magna-253a', name: 'Villa Magna 253 A' },
   { id: 'villa-magna-253b', name: 'Villa Magna 253 B' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336' },
+  { id: 'estrella-502', name: 'V Estrella 502' },
+  { id: 'casita-1', name: 'Casita 1' },
+  { id: 'casita-2', name: 'Casita 2' },
   { id: 'nitta-102', name: 'Nitta 102' },
   { id: 'mismaloya-7202', name: 'Mismaloya 7202' },
   { id: 'mismaloya-5705', name: 'Mismaloya 5705' },

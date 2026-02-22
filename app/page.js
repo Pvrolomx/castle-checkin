@@ -263,7 +263,6 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.3s' }}>
             <a href="#properties" className="btn-primary inline-block">{t.properties}</a>
-            <a href="/checkin" className="btn-secondary inline-block">{t.checkinBtn}</a>
           </div>
           
           {showInstall && (
@@ -321,14 +320,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Check-in CTA */}
-      <section className="py-16 px-4 bg-castle-sand">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-3xl font-semibold mb-4" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{t.checkin}</h2>
-          <p className="text-gray-600 mb-6">{t.checkinDesc}</p>
-          <a href="/checkin" className="btn-primary inline-block">{t.checkinBtn} →</a>
-        </div>
-      </section>
 
       {/* Contact */}
       <section id="contact" className="py-16 px-4 bg-white">

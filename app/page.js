@@ -115,16 +115,16 @@ const GALLERY = {
 }
 
 const PROPERTIES = [
-  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253a.jpg' },
-  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Marina Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
-  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Nayarit', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-336.jpg' },
+  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253a.jpg' },
+  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/villa-magna-253b.jpg' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Vallarta', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-336.jpg' },
   { id: 'estrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, photo: '/properties/estrella-502.jpg' },
   { id: 'casita-1', name: 'Casita 1', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-1.jpg' },
   { id: 'casita-2', name: 'Casita 2', location: 'Centro / Malecón', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-2.jpg' },
-  { id: 'nitta-102', name: 'Nitta 102', location: 'Zona Romántica', beds: 1, baths: 1, guests: 2, photo: '/properties/nitta-102.jpg' },
+  { id: 'nitta-102', name: 'Nitta 102', location: 'Nuevo Vallarta', beds: 1, baths: 1, guests: 2, photo: '/properties/nitta-102.jpg' },
   { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, photo: '/properties/mismaloya-7202.jpg' },
   { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 2, baths: 2, guests: 5, photo: '/properties/mismaloya-5705.jpg' },
-  { id: 'avida-408', name: 'Avida 408', location: 'Fluvial Vallarta', beds: 2, baths: 2, guests: 3, photo: '/properties/avida-408.jpg' },
+  { id: 'avida-408', name: 'Avida 408', location: 'Zona Romántica', beds: 2, baths: 2, guests: 3, photo: '/properties/avida-408.jpg' },
   { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
 ]
 

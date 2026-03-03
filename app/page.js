@@ -128,6 +128,20 @@ const PROPERTIES = [
   { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
 ]
 
+const PROPERTY_PINS = {
+  'villa-magna-253a': '2531',
+  'villa-magna-253b': '2532',
+  'villa-magna-336': '3360',
+  'estrella-502': '5020',
+  'casita-1': '1001',
+  'casita-2': '1002',
+  'nitta-102': '1020',
+  'mismaloya-7202': '7202',
+  'mismaloya-5705': '5705',
+  'avida-408': '4080',
+  'cielo-101': '1010',
+}
+
 const TEXTS = {
   en: {
     hero: 'Your Home Away From Home',
@@ -272,6 +286,10 @@ export default function HomePage() {
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(null)
+  const [checkinModal, setCheckinModal] = useState(false)
+  const [selectedProp, setSelectedProp] = useState(null)
+  const [pinInput, setPinInput] = useState('')
+  const [pinError, setPinError] = useState(false)
   const t = TEXTS[lang]
 
   useEffect(() => {
@@ -340,6 +358,7 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in" style={{ animationDelay: '0.3s' }}>
             <a href="#properties" className="btn-primary inline-block">{t.properties}</a>
+            <button onClick={() => setCheckinModal(true)} className="btn-secondary inline-block">{t.checkinBtn}</button>
           </div>
           
           {showInstall && (
@@ -427,6 +446,91 @@ export default function HomePage() {
           </p>
         </div>
       </footer>
+
+      {/* Check-in Modal */}
+      {checkinModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setCheckinModal(false); setSelectedProp(null); setPinInput(''); setPinError(false) }}>
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[85vh] overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+            
+            {!selectedProp ? (
+              <>
+                <div className="p-6 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+                      {lang === 'en' ? 'Select Your Property' : 'Selecciona Tu Propiedad'}
+                    </h2>
+                    <button onClick={() => setCheckinModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+                  </div>
+                  <p className="text-gray-500 text-sm mt-1">{lang === 'en' ? 'Where are you staying?' : '¿Dónde te hospedas?'}</p>
+                </div>
+                <div className="p-4 space-y-2">
+                  {PROPERTIES.map(p => (
+                    <button
+                      key={p.id}
+                      onClick={() => { setSelectedProp(p); setPinInput(''); setPinError(false) }}
+                      className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-amber-400 hover:bg-amber-50/50 transition-all flex items-center gap-3"
+                    >
+                      {p.photo && <img src={p.photo} alt={p.name} className="w-12 h-12 rounded-lg object-cover" />}
+                      <div>
+                        <span className="font-medium text-gray-800">{p.name}</span>
+                        <span className="text-gray-400 text-sm block">{p.location}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="p-6 border-b border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <button onClick={() => { setSelectedProp(null); setPinInput(''); setPinError(false) }} className="text-gray-400 hover:text-gray-600 text-sm">
+                      ← {lang === 'en' ? 'Back' : 'Volver'}
+                    </button>
+                    <button onClick={() => { setCheckinModal(false); setSelectedProp(null); setPinInput(''); setPinError(false) }} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+                  </div>
+                </div>
+                <div className="p-8 text-center">
+                  {selectedProp.photo && <img src={selectedProp.photo} alt={selectedProp.name} className="w-20 h-20 rounded-xl object-cover mx-auto mb-4" />}
+                  <h3 className="text-lg font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{selectedProp.name}</h3>
+                  <p className="text-gray-400 text-sm mb-6">{lang === 'en' ? 'Enter your access PIN' : 'Ingresa tu PIN de acceso'}</p>
+                  
+                  <form onSubmit={(e) => {
+                    e.preventDefault()
+                    if (pinInput === PROPERTY_PINS[selectedProp.id]) {
+                      const token = btoa(JSON.stringify({ p: selectedProp.id }))
+                      window.location.href = '/checkin?t=' + token
+                    } else {
+                      setPinError(true)
+                      setPinInput('')
+                    }
+                  }}>
+                    <input
+                      type="password"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      value={pinInput}
+                      onChange={(e) => { setPinInput(e.target.value); setPinError(false) }}
+                      placeholder="• • • •"
+                      autoFocus
+                      className="w-40 mx-auto block text-center text-2xl tracking-[0.5em] bg-gray-50 border border-gray-300 rounded-xl py-3 text-gray-800 placeholder-gray-300 focus:outline-none focus:border-amber-500 transition-colors"
+                    />
+                    {pinError && (
+                      <p className="text-red-500 text-sm mt-3">{lang === 'en' ? 'Incorrect PIN' : 'PIN incorrecto'}</p>
+                    )}
+                    <button
+                      type="submit"
+                      className="mt-6 btn-primary inline-block px-8"
+                    >
+                      {lang === 'en' ? 'Enter' : 'Entrar'} →
+                    </button>
+                  </form>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -80,8 +80,8 @@ export default function GeneratePage() {
             {pinError && (
               <p className="text-red-500 text-sm fade-in">PIN incorrecto</p>
             )}
-            <button type="submit" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">
-              →
+            <button type="submit" className="mt-4 px-8 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-medium transition-colors">
+              Enter
             </button>
           </form>
           <div className="mt-8">

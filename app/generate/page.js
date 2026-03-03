@@ -6,30 +6,24 @@ import Link from 'next/link'
 const ADMIN_PIN = '1978'
 
 const PROPERTIES = [
-  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', zone: 'Marina Vallarta' },
-  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', zone: 'Marina Vallarta' },
-  { id: 'villa-magna-336', name: 'Villa Magna 336', zone: 'Nuevo Nayarit' },
-  { id: 'estrella-502', name: 'V Estrella 502', zone: 'Alta Vista' },
-  { id: 'casita-1', name: 'Casita 1', zone: 'Centro/Malecón' },
-  { id: 'casita-2', name: 'Casita 2', zone: 'Centro/Malecón' },
-  { id: 'nitta-102', name: 'Nitta 102', zone: 'Zona Romántica' },
-  { id: 'mismaloya-7202', name: 'Mismaloya 7202', zone: 'Mismaloya' },
-  { id: 'mismaloya-5705', name: 'Mismaloya 5705', zone: 'Mismaloya' },
-  { id: 'avida-408', name: 'Avida 408', zone: 'Fluvial Vallarta' },
-  { id: 'cielo-101', name: 'Cielo 101', zone: 'Alta Vista' },
+  { id: 'villa-magna-253a', name: 'Villa Magna 253 A', pin: '2531' },
+  { id: 'villa-magna-253b', name: 'Villa Magna 253 B', pin: '2532' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336', pin: '3360' },
+  { id: 'estrella-502', name: 'V Estrella 502', pin: '5020' },
+  { id: 'casita-1', name: 'Casita 1', pin: '1001' },
+  { id: 'casita-2', name: 'Casita 2', pin: '1002' },
+  { id: 'nitta-102', name: 'Nitta 102', pin: '1020' },
+  { id: 'mismaloya-7202', name: 'Mismaloya 7202', pin: '7202' },
+  { id: 'mismaloya-5705', name: 'Mismaloya 5705', pin: '5705' },
+  { id: 'avida-408', name: 'Avida 408', pin: '4080' },
+  { id: 'cielo-101', name: 'Cielo 101', pin: '1010' },
 ]
-
-function encodeToken(propertyId) {
-  return btoa(JSON.stringify({ p: propertyId }))
-}
 
 export default function GeneratePage() {
   const [authenticated, setAuthenticated] = useState(false)
   const [pin, setPin] = useState('')
   const [pinError, setPinError] = useState(false)
-  const [selectedProperty, setSelectedProperty] = useState('')
-  const [generatedLink, setGeneratedLink] = useState('')
-  const [copied, setCopied] = useState(false)
+  const [copiedId, setCopiedId] = useState(null)
 
   const handlePin = (e) => {
     e.preventDefault()
@@ -42,50 +36,35 @@ export default function GeneratePage() {
     }
   }
 
-  const handleGenerate = (propertyId) => {
-    setSelectedProperty(propertyId)
-    const token = encodeToken(propertyId)
-    const link = `https://castlesolutions.mx/checkin?t=${token}`
-    setGeneratedLink(link)
-    setCopied(false)
+  const handleWhatsApp = (prop) => {
+    const message = `\u{1F3F0} Castle Solutions\n\nWelcome! Here is your check-in info for *${prop.name}*:\n\n\u{1F517} Link: https://castlesolutions.mx\n\u{1F511} PIN: *${prop.pin}*\n\nClick the link, tap "Check-in", select your property, and enter your PIN.\n\nWe look forward to welcoming you to Puerto Vallarta! \u{1F334}\n\n---\n\n\u{1F3F0} Castle Solutions\n\n\u{00A1}Bienvenido! Aqu\u{00ED} est\u{00E1} tu informaci\u{00F3}n de check-in para *${prop.name}*:\n\n\u{1F517} Link: https://castlesolutions.mx\n\u{1F511} PIN: *${prop.pin}*\n\nHaz clic en el enlace, toca "Check-in", selecciona tu propiedad e ingresa tu PIN.\n\n\u{00A1}Te esperamos en Puerto Vallarta! \u{1F334}`
+
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank')
   }
 
-  const handleCopy = async () => {
+  const handleCopyPin = async (prop) => {
+    const text = `${prop.name} — PIN: ${prop.pin}\nhttps://castlesolutions.mx`
     try {
-      await navigator.clipboard.writeText(generatedLink)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(text)
     } catch {
       const ta = document.createElement('textarea')
-      ta.value = generatedLink
+      ta.value = text
       document.body.appendChild(ta)
       ta.select()
       document.execCommand('copy')
       document.body.removeChild(ta)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
     }
+    setCopiedId(prop.id)
+    setTimeout(() => setCopiedId(null), 2000)
   }
 
-  const handleShareWhatsApp = () => {
-    const prop = PROPERTIES.find(p => p.id === selectedProperty)
-    const propName = prop ? prop.name : ''
-    
-    const message = `🏰 Castle Solutions\n\nHere is your check-in link for ${propName}:\n\n👉 ${generatedLink}\n\nPlease complete the form before your arrival. We look forward to welcoming you to Puerto Vallarta! 🌴\n\n---\n\n🏰 Castle Solutions\n\nAquí está tu enlace de check-in para ${propName}:\n\n👉 ${generatedLink}\n\nPor favor completa el formulario antes de tu llegada. ¡Te esperamos en Puerto Vallarta! 🌴`
-    
-    const encodedMsg = encodeURIComponent(message)
-    window.open(`https://wa.me/?text=${encodedMsg}`, '_blank')
-  }
-
-  // PIN screen
   if (!authenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#F5F1E6' }}>
         <div className="text-center fade-in max-w-sm mx-auto">
           <div className="mb-8">
-            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-100" />
+            <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4" />
           </div>
-          
           <form onSubmit={handlePin} className="space-y-4">
             <input
               type="password"
@@ -101,14 +80,10 @@ export default function GeneratePage() {
             {pinError && (
               <p className="text-red-500 text-sm fade-in">PIN incorrecto</p>
             )}
-            <button
-              type="submit"
-              className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
-            >
+            <button type="submit" className="text-gray-400 hover:text-gray-600 text-sm transition-colors">
               →
             </button>
           </form>
-
           <div className="mt-8">
             <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors text-sm">
               ← Volver al inicio
@@ -119,81 +94,53 @@ export default function GeneratePage() {
     )
   }
 
-  // Admin panel — property grid
   return (
     <div className="min-h-screen py-8 px-4" style={{ background: '#F5F1E6' }}>
       <div className="max-w-lg mx-auto">
-        
         <div className="text-center mb-8 fade-in">
-          <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4 opacity-100" />
+          <img src="/logo.png" alt="Castle Solutions" className="h-16 mx-auto mb-4" />
           <h1 className="text-2xl font-semibold text-gray-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            Generar Link de Check-in
+            Panel de Check-in
           </h1>
-          <p className="text-gray-500 text-sm mt-1">Selecciona la propiedad del huésped</p>
+          <p className="text-gray-500 text-sm mt-1">PINs de acceso por propiedad</p>
         </div>
 
-        {/* Property grid */}
-        <div className="space-y-2 fade-in" style={{ animationDelay: '0.1s' }}>
+        <div className="space-y-3 fade-in" style={{ animationDelay: '0.1s' }}>
           {PROPERTIES.map(p => (
-            <button
-              key={p.id}
-              onClick={() => handleGenerate(p.id)}
-              className={`w-full text-left px-4 py-3 rounded-xl border transition-all hover:scale-[1.01] ${
-                selectedProperty === p.id 
-                  ? 'bg-amber-50 border-amber-400 text-gray-800' 
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-amber-50/50 hover:border-amber-300'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-medium text-gray-800">{p.name}</span>
-                  
-                </div>
-                {selectedProperty === p.id && (
-                  <span className="text-amber-600 text-sm">✓</span>
-                )}
+            <div key={p.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="font-medium text-gray-800">{p.name}</span>
+                <span className="font-mono text-lg font-bold tracking-wider" style={{ color: '#C9A227' }}>{p.pin}</span>
               </div>
-            </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleCopyPin(p)}
+                  className="flex-1 py-2 rounded-lg text-sm font-medium transition-all"
+                  style={{
+                    backgroundColor: copiedId === p.id ? 'rgba(34,197,94,0.1)' : 'rgba(0,0,0,0.03)',
+                    color: copiedId === p.id ? '#16a34a' : '#6b7280',
+                    border: `1px solid ${copiedId === p.id ? 'rgba(34,197,94,0.3)' : 'rgba(0,0,0,0.08)'}`
+                  }}
+                >
+                  {copiedId === p.id ? '✅ Copiado' : '📋 Copiar'}
+                </button>
+                <button
+                  onClick={() => handleWhatsApp(p)}
+                  className="flex-1 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90"
+                  style={{ backgroundColor: '#25D366' }}
+                >
+                  💬 WhatsApp
+                </button>
+              </div>
+            </div>
           ))}
         </div>
-
-        {/* Generated link result */}
-        {generatedLink && (
-          <div className="mt-6 bg-white rounded-2xl p-6 border border-amber-300 shadow-lg fade-in">
-            <div className="bg-gray-50 rounded-xl p-3 mb-4 break-all">
-              <p className="text-amber-700 text-sm font-mono">{generatedLink}</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={handleCopy}
-                className="py-3 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02]"
-                style={{ 
-                  backgroundColor: copied ? 'rgba(34,197,94,0.2)' : 'rgba(0,0,0,0.05)', 
-                  color: copied ? '#22c55e' : '#374151',
-                  border: `1px solid ${copied ? 'rgba(34,197,94,0.3)' : 'rgba(0,0,0,0.1)'}`
-                }}
-              >
-                {copied ? '✅ Copiado!' : '📋 Copiar'}
-              </button>
-
-              <button
-                onClick={handleShareWhatsApp}
-                className="py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-[1.02]"
-                style={{ backgroundColor: '#25D366' }}
-              >
-                💬 WhatsApp
-              </button>
-            </div>
-          </div>
-        )}
 
         <div className="text-center mt-8">
           <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors text-sm">
             ← Volver al inicio
           </Link>
         </div>
-
         <div className="text-center mt-4 text-gray-400 text-xs">
           <p>Castle Solutions © {new Date().getFullYear()}</p>
           <p className="mt-1">Hecho por <span style={{color: '#C9A227'}}>duendes.app</span> 2026</p>

@@ -186,6 +186,28 @@ const TEXTS = {
     by: 'por',
     photos: 'fotos',
     viewGallery: 'Ver Galería',
+  },
+  fr: {
+    hero: 'Votre Maison Loin de Chez Vous',
+    heroSub: 'Locations de vacances premium à Puerto Vallarta',
+    properties: 'Nos Propriétés',
+    beds: 'Chambres',
+    baths: 'Salles de bain',
+    guests: 'Voyageurs',
+    checkin: 'Enregistrement des Hôtes',
+    checkinDesc: 'Déjà réservé? Complétez votre enregistrement',
+    checkinBtn: 'Aller au Check-in',
+    contact: 'Nous Contacter',
+    contactDesc: 'Des questions sur nos propriétés?',
+    phone: 'WhatsApp',
+    email: 'Email',
+    footer: 'Puerto Vallarta, Jalisco, Mexique',
+    rights: 'Tous droits réservés',
+    install: 'Installer l\'App',
+    madeWith: 'Fait avec',
+    by: 'par',
+    photos: 'photos',
+    viewGallery: 'Voir la Galerie',
   }
 }
 
@@ -282,7 +304,7 @@ function GalleryModal({ images, propertyName, onClose, startIndex = 0 }) {
 }
 
 export default function HomePage() {
-  const [lang, setLang] = useState('es')
+  const [lang, setLang] = useState(() => { if (typeof navigator !== 'undefined') { const l = navigator.language?.slice(0,2); if (l === 'en') return 'en'; if (l === 'fr') return 'fr'; } return 'es'; })
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
   const [galleryOpen, setGalleryOpen] = useState(null)
@@ -337,6 +359,7 @@ export default function HomePage() {
             <div className="lang-toggle">
               <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>🇲🇽</button>
               <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>🇺🇸</button>
+              <button className={`lang-btn ${lang === 'fr' ? 'active' : ''}`} onClick={() => setLang('fr')}>🇫🇷</button>
             </div>
           </div>
         </div>
@@ -457,11 +480,11 @@ export default function HomePage() {
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-center justify-between">
                     <h2 className="text-xl font-semibold" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-                      {lang === 'en' ? 'Select Your Property' : 'Selecciona Tu Propiedad'}
+                      {lang === 'en' ? 'Select Your Property' : lang === 'fr' ? 'Sélectionnez Votre Propriété' : 'Selecciona Tu Propiedad'}
                     </h2>
                     <button onClick={() => setCheckinModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
                   </div>
-                  <p className="text-gray-500 text-sm mt-1">{lang === 'en' ? 'Where are you staying?' : '¿Dónde te hospedas?'}</p>
+                  <p className="text-gray-500 text-sm mt-1">{lang === 'en' ? 'Where are you staying?' : lang === 'fr' ? 'Où séjournez-vous?' : '¿Dónde te hospedas?'}</p>
                 </div>
                 <div className="p-4 space-y-2">
                   {PROPERTIES.map(p => (
@@ -484,7 +507,7 @@ export default function HomePage() {
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-center justify-between">
                     <button onClick={() => { setSelectedProp(null); setPinInput(''); setPinError(false) }} className="text-gray-400 hover:text-gray-600 text-sm">
-                      ← {lang === 'en' ? 'Back' : 'Volver'}
+                      ← {lang === 'en' ? 'Back' : lang === 'fr' ? 'Retour' : 'Volver'}
                     </button>
                     <button onClick={() => { setCheckinModal(false); setSelectedProp(null); setPinInput(''); setPinError(false) }} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
                   </div>
@@ -492,7 +515,7 @@ export default function HomePage() {
                 <div className="p-8 text-center">
                   {selectedProp.photo && <img src={selectedProp.photo} alt={selectedProp.name} className="w-20 h-20 rounded-xl object-cover mx-auto mb-4" />}
                   <h3 className="text-lg font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{selectedProp.name}</h3>
-                  <p className="text-gray-400 text-sm mb-6">{lang === 'en' ? 'Enter your access PIN' : 'Ingresa tu PIN de acceso'}</p>
+                  <p className="text-gray-400 text-sm mb-6">{lang === 'en' ? 'Enter your access PIN' : lang === 'fr' ? 'Entrez votre PIN d\'accès' : 'Ingresa tu PIN de acceso'}</p>
                   
                   <form onSubmit={(e) => {
                     e.preventDefault()
@@ -516,13 +539,13 @@ export default function HomePage() {
                       className="w-40 mx-auto block text-center text-2xl tracking-[0.5em] bg-gray-50 border border-gray-300 rounded-xl py-3 text-gray-800 placeholder-gray-300 focus:outline-none focus:border-amber-500 transition-colors"
                     />
                     {pinError && (
-                      <p className="text-red-500 text-sm mt-3">{lang === 'en' ? 'Incorrect PIN' : 'PIN incorrecto'}</p>
+                      <p className="text-red-500 text-sm mt-3">{lang === 'en' ? 'Incorrect PIN' : lang === 'fr' ? 'PIN incorrect' : 'PIN incorrecto'}</p>
                     )}
                     <button
                       type="submit"
                       className="mt-6 btn-primary inline-block px-8"
                     >
-                      {lang === 'en' ? 'Enter' : 'Entrar'} →
+                      {lang === 'en' ? 'Enter' : lang === 'fr' ? 'Entrer' : 'Entrar'} →
                     </button>
                   </form>
                 </div>

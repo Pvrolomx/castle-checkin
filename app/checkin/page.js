@@ -21,7 +21,8 @@ const PROPERTIES = [
 
 const ARRIVAL_METHODS = {
   en: ['Airplane', 'Car', 'Bus', 'Other'],
-  es: ['Avión', 'Auto', 'Autobús', 'Otro']
+  es: ['Avión', 'Auto', 'Autobús', 'Otro'],
+  fr: ['Avion', 'Voiture', 'Bus', 'Autre']
 }
 
 const FLIGHT_API = 'https://castle-flights.vercel.app/api/flight'
@@ -114,6 +115,50 @@ const TEXTS = {
     noTokenSub: 'Contacta a Castle Solutions para recibir tu enlace personalizado de check-in.',
     contactWhatsApp: 'Contáctanos por WhatsApp',
     invalidToken: 'Este enlace de check-in es inválido o ha expirado.',
+  },
+  fr: {
+    back: '← Retour à l\'Accueil',
+    title: 'Enregistrement des Hôtes',
+    subtitle: 'Bienvenue! Veuillez compléter ce formulaire avant votre arrivée',
+    property: 'Sélectionner la Propriété',
+    propertyLabel: 'Propriété',
+    guestName: 'Nom du Voyageur',
+    numGuests: 'Nombre de Voyageurs',
+    guestNames: 'Noms de Tous les Voyageurs',
+    guestNamesPlaceholder: 'Veuillez lister tous les noms',
+    phone: 'Téléphone Portable',
+    email: 'Email',
+    arrivalDate: 'Date d\'Arrivée',
+    arrivalTime: 'Heure d\'Arrivée',
+    departureDate: 'Date de Départ',
+    departureTime: 'Heure de Départ',
+    arrivalMethod: 'Mode d\'Arrivée',
+    flightNumber: 'Numéro de Vol',
+    flightPlaceholder: 'ex. AA1234',
+    specialRequests: 'Demandes Spéciales',
+    specialPlaceholder: 'Toute demande spéciale ou note...',
+    submit: 'Soumettre l\'Enregistrement',
+    submitting: 'Envoi en cours...',
+    successTitle: 'Bienvenue à Puerto Vallarta!',
+    successSub: 'Votre enregistrement est confirmé. Nous sommes ravis de vous accueillir!',
+    successProperty: 'Votre séjour à',
+    successGuide: 'Voir le Guide de votre Propriété',
+    successGuideDesc: 'WiFi, TV, coffre-fort, codes d\'accès et plus — tout ce dont vous avez besoin',
+    successContact: 'Nous vous contacterons bientôt avec les détails d\'arrivée.',
+    error: 'Une erreur s\'est produite. Veuillez réessayer.',
+    required: 'Champs requis',
+    flightFound: 'Vol trouvé!',
+    flightNotFound: 'Vol non trouvé. Vous pouvez saisir les détails manuellement.',
+    flightSearching: 'Recherche du vol...',
+    flightRoute: 'Itinéraire',
+    flightStatus: 'Statut',
+    flightETA: 'Arrivée estimée',
+    flightStatuses: { scheduled: 'Programmé', active: 'En Vol', landed: 'Atterri', cancelled: 'Annulé', delayed: 'Retardé', diverted: 'Dérouté' },
+    trackFlight: 'Suivre ce vol en direct',
+    noToken: 'Vous avez besoin d\'un lien d\'enregistrement pour accéder à cette page.',
+    noTokenSub: 'Veuillez contacter Castle Solutions pour recevoir votre lien personnalisé.',
+    contactWhatsApp: 'Contactez-nous sur WhatsApp',
+    invalidToken: 'Ce lien d\'enregistrement est invalide ou expiré.',
   }
 }
 
@@ -252,6 +297,9 @@ function NoTokenScreen({ lang }) {
               <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => window.location.search = ''}>
                 🇺🇸 English
               </button>
+              <button className={`lang-btn ${lang === 'fr' ? 'active' : ''}`} onClick={() => window.location.search = ''}>
+                🇫🇷 Français
+              </button>
             </div>
           </div>
         </div>
@@ -276,7 +324,7 @@ function CheckinForm() {
   const searchParams = useSearchParams()
   const tokenStr = searchParams.get('t')
   
-  const [lang, setLang] = useState('es')
+  const [lang, setLang] = useState(() => { if (typeof navigator !== 'undefined') { const l = navigator.language?.slice(0,2); if (l === 'en') return 'en'; if (l === 'fr') return 'fr'; } return 'es'; })
   const [status, setStatus] = useState('idle')
   const [flightData, setFlightData] = useState(null)
   const [flightStatus, setFlightStatus] = useState('idle')
@@ -505,7 +553,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
           <div className="text-6xl mb-4 text-green-500">✓</div>
           
           <h1 className="text-3xl md:text-4xl font-semibold mb-2" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
-            {lang === 'en' ? `Congratulations, ${firstName}!` : `¡Felicidades, ${firstName}!`}
+            {lang === 'en' ? `Congratulations, ${firstName}!` : lang === 'fr' ? `Félicitations, ${firstName}!` : `¡Felicidades, ${firstName}!`}
           </h1>
           
           <p className="text-xl mb-2" style={{ fontFamily: 'Cormorant Garamond, serif', color: '#C9A227' }}>
@@ -641,6 +689,9 @@ Enviado: ${new Date().toLocaleString('es-MX')}
               </button>
               <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>
                 🇺🇸 English
+              </button>
+              <button className={`lang-btn ${lang === 'fr' ? 'active' : ''}`} onClick={() => setLang('fr')}>
+                🇫🇷 Français
               </button>
             </div>
           </div>

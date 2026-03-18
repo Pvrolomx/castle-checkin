@@ -115,30 +115,32 @@ const GALLERY = {
 }
 
 const PROPERTIES = [
-  // NUEVO VALLARTA - Available
+  // === AVAILABLE FOR RENT (primero) ===
+  // NUEVO VALLARTA
   { id: 'villa-magna-253a', name: 'Villa Magna 253-A', location: 'Nuevo Vallarta', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-253a.jpg' },
   { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Vallarta', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-336.jpg' },
+  { id: 'nitta-102', name: 'Nitta 102', location: 'Nuevo Vallarta', beds: 1, baths: 1, guests: 3, photo: '/properties/nitta-102.jpg' },
+  { id: 'nitta-404', name: 'Nitta 404', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/nitta-404.jpg' },
+  { id: 'playa-royale-603', name: 'Playa Royale 603', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 6, photo: '/properties/playa-royale-603.jpg' },
+  { id: 'playa-royale-604', name: 'Playa Royale 604', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 6, photo: '/properties/playa-royale-604.jpg' },
+  // ALTA VISTA
+  { id: 'vestrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, photo: '/properties/estrella-502.jpg' },
+  { id: 'cielo', name: 'Cielo', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
+  { id: 'sagitario', name: 'Sagitario', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/sagitario.jpg' },
+  // CENTRO / ZONA ROMANTICA
+  { id: 'casita-1', name: 'Casita 1', location: 'Centro Malecón', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-1.jpg' },
+  { id: 'casita-2', name: 'Casita 2', location: 'Centro Malecón', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-2.jpg' },
+  { id: 'avida-408', name: 'Avida 408', location: 'Zona Romántica', beds: 1, baths: 2, guests: 4, photo: '/properties/avida-408.jpg' },
+  // MISMALOYA
+  { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya', beds: 1, baths: 2, guests: 2, photo: '/properties/mismaloya-7202.jpg' },
+  { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya', beds: 1, baths: 1, guests: 2, photo: '/properties/mismaloya-5705.jpg' },
+  // === NOT AVAILABLE FOR RENT ===
   { id: 'villa-magna-352a', name: 'Villa Magna 352-A', location: 'Nuevo Vallarta', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-352a.jpg', unavailable: true, note: 'Not available for rent' },
   { id: 'villa-magna-352b', name: 'Villa Magna 352-B', location: 'Nuevo Vallarta', beds: 1, baths: 1, guests: 2, photo: '/properties/villa-magna-352b.jpg', unavailable: true, note: 'Not available for rent' },
   { id: 'villa-magna-373b', name: 'Villa Magna 373-B', location: 'Nuevo Vallarta', beds: 3, baths: 3, guests: 6, photo: '/properties/villa-magna-373b.jpg', unavailable: true, note: 'Not available for rent' },
-  { id: 'nitta-102', name: 'Nitta 102', location: 'Nuevo Vallarta', beds: 1, baths: 1, guests: 2, photo: '/properties/nitta-102.jpg' },
-  { id: 'nitta-404', name: 'Nitta 404', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/nitta-404.jpg' },
   { id: 'nitta-305', name: 'Nitta 305', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 4, photo: '/properties/nitta-305.jpg', unavailable: true, note: 'Not available for rent' },
-  { id: 'playa-royale-603', name: 'Playa Royale 603', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 6, photo: '/properties/playa-royale-603.jpg' },
-  { id: 'playa-royale-604', name: 'Playa Royale 604', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 6, photo: '/properties/playa-royale-604.jpg' },
   { id: 'playa-royale-103', name: 'Playa Royale 103', location: 'Nuevo Vallarta', beds: 1, baths: 2, guests: 4, photo: '/properties/playa-royale-103.jpg', unavailable: true, note: 'Not available for rent' },
-  { id: 'playa-royale-105', name: 'Playa Royale 105', location: 'Nuevo Vallarta', beds: 1, baths: 2, guests: 4, photo: '/properties/playa-royale-105.jpg' },
-  // ALTA VISTA - Available
-  { id: 'vestrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, photo: '/properties/estrella-502.jpg' },
-  { id: 'cielo-101', name: 'Cielo', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
-  { id: 'sagitario', name: 'Sagitario', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/sagitario.jpg' },
-  // CENTRO - Available
-  { id: 'loft-1', name: 'Loft 1', location: 'Centro', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-1.jpg' },
-  { id: 'loft-2', name: 'Loft 2', location: 'Centro', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-2.jpg' },
-  { id: 'avida-408', name: 'Avida 408', location: 'Centro', beds: 1, baths: 2, guests: 4, photo: '/properties/avida-408.jpg' },
-  // MISMALOYA - Available
-  { id: 'mismaloya-7202', name: 'La Jolla de Mismaloya 7202', location: 'Mismaloya', beds: 1, baths: 2, guests: 2, photo: '/properties/mismaloya-7202.jpg' },
-  { id: 'mismaloya-5705', name: 'La Jolla de Mismaloya 5705', location: 'Mismaloya', beds: 1, baths: 1, guests: 2, photo: '/properties/mismaloya-5705.jpg' },
+  { id: 'playa-royale-105', name: 'Playa Royale 105', location: 'Nuevo Vallarta', beds: 1, baths: 2, guests: 4, photo: '/properties/playa-royale-105.jpg', unavailable: true, note: 'Not available for rent' },
 ]
 
 const PROPERTY_PINS = {

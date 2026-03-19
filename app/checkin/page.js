@@ -6,17 +6,32 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 const PROPERTIES = [
-  { id: 'villa-magna-253a', name: 'Villa Magna 253 A' },
-  { id: 'villa-magna-253b', name: 'Villa Magna 253 B' },
-  { id: 'villa-magna-336', name: 'Villa Magna 336' },
-  { id: 'estrella-502', name: 'V Estrella 502' },
-  { id: 'casita-1', name: 'Casita 1' },
-  { id: 'casita-2', name: 'Casita 2' },
-  { id: 'nitta-102', name: 'Nitta 102' },
-  { id: 'mismaloya-7202', name: 'Mismaloya 7202' },
-  { id: 'mismaloya-5705', name: 'Mismaloya 5705' },
-  { id: 'avida-408', name: 'Avida 408' },
-  { id: 'cielo-101', name: 'Cielo 101' },
+  // === DISPONIBLES PARA RENTA ===
+  // NUEVO VALLARTA
+  { id: 'villa-magna-253a', name: 'Villa Magna 253-A', location: 'Nuevo Vallarta' },
+  { id: 'villa-magna-336', name: 'Villa Magna 336', location: 'Nuevo Vallarta' },
+  { id: 'nitta-102', name: 'Nitta 102', location: 'Nuevo Vallarta' },
+  { id: 'nitta-404', name: 'Nitta 404', location: 'Nuevo Vallarta' },
+  { id: 'playa-royale-603', name: 'Playa Royale 603', location: 'Nuevo Vallarta' },
+  { id: 'playa-royale-604', name: 'Playa Royale 604', location: 'Nuevo Vallarta' },
+  // ALTA VISTA
+  { id: 'vestrella-502', name: 'V Estrella 502', location: 'Alta Vista' },
+  { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista' },
+  { id: 'sagitario', name: 'Sagitario', location: 'Alta Vista' },
+  // CENTRO / ZONA ROMANTICA
+  { id: 'casita-1', name: 'Casita 1', location: 'Centro Malecón' },
+  { id: 'casita-2', name: 'Casita 2', location: 'Centro Malecón' },
+  { id: 'avida-408', name: 'Avida 408', location: 'Zona Romántica' },
+  // MISMALOYA (no disponibles pero pueden tener check-in)
+  { id: 'mismaloya-7202', name: 'Mismaloya 7202', location: 'Mismaloya' },
+  { id: 'mismaloya-5705', name: 'Mismaloya 5705', location: 'Mismaloya' },
+  // === NO DISPONIBLES PARA RENTA ===
+  { id: 'villa-magna-352a', name: 'Villa Magna 352-A', location: 'Nuevo Vallarta', unavailable: true },
+  { id: 'villa-magna-352b', name: 'Villa Magna 352-B', location: 'Nuevo Vallarta', unavailable: true },
+  { id: 'villa-magna-373b', name: 'Villa Magna 373-B', location: 'Nuevo Vallarta', unavailable: true },
+  { id: 'nitta-305', name: 'Nitta 305', location: 'Nuevo Vallarta', unavailable: true },
+  { id: 'playa-royale-103', name: 'Playa Royale 103', location: 'Nuevo Vallarta', unavailable: true },
+  { id: 'playa-royale-105', name: 'Playa Royale 105', location: 'Nuevo Vallarta', unavailable: true },
 ]
 
 const ARRIVAL_METHODS = {

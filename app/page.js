@@ -125,7 +125,7 @@ const PROPERTIES = [
   { id: 'playa-royale-604', name: 'Playa Royale 604', location: 'Nuevo Vallarta', beds: 2, baths: 2, guests: 6, photo: '/properties/playa-royale-604.jpg' },
   // ALTA VISTA
   { id: 'vestrella-502', name: 'V Estrella 502', location: 'Alta Vista', beds: 3, baths: 3, guests: 6, photo: '/properties/estrella-502.jpg' },
-  { id: 'cielo', name: 'Cielo', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
+  { id: 'cielo-101', name: 'Cielo 101', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/cielo-101.jpg' },
   { id: 'sagitario', name: 'Sagitario', location: 'Alta Vista', beds: 2, baths: 2, guests: 4, photo: '/properties/sagitario.jpg' },
   // CENTRO / ZONA ROMANTICA
   { id: 'casita-1', name: 'Casita 1', location: 'Centro Malecón', beds: 1, baths: 2, guests: 3, photo: '/properties/casita-1.jpg' },
@@ -145,16 +145,25 @@ const PROPERTIES = [
 
 const PROPERTY_PINS = {
   'villa-magna-253a': '2531',
-  'villa-magna-253b': '2532',
   'villa-magna-336': '3360',
-  'estrella-502': '5020',
+  'nitta-102': '1020',
+  'nitta-404': '4040',
+  'playa-royale-603': '6030',
+  'playa-royale-604': '6040',
+  'vestrella-502': '5020',
+  'cielo-101': '1010',
+  'sagitario': '4780',
   'casita-1': '1001',
   'casita-2': '1002',
-  'nitta-102': '1020',
+  'avida-408': '4080',
   'mismaloya-7202': '7202',
   'mismaloya-5705': '5705',
-  'avida-408': '4080',
-  'cielo-101': '1010',
+  'villa-magna-352a': '3521',
+  'villa-magna-352b': '3522',
+  'villa-magna-373b': '3732',
+  'nitta-305': '3050',
+  'playa-royale-103': '1030',
+  'playa-royale-105': '1050',
 }
 
 const TEXTS = {

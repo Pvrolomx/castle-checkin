@@ -30,7 +30,46 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body>{children}</body>
+      <body>
+        {/* Install Button - Fixed Bottom */}
+        <div id="install-container" className="hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+          <button id="install-btn" className="flex items-center gap-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-full shadow-lg text-sm font-medium transition-all">
+            <span>📲</span> Install App
+          </button>
+        </div>
+        
+        {children}
+        
+        <script dangerouslySetInnerHTML={{ __html: `
+          // Service Worker
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {})
+          }
+          
+          // PWA Install Prompt
+          let deferredPrompt;
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-container').classList.remove('hidden');
+          });
+          
+          document.getElementById('install-btn')?.addEventListener('click', () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(r => {
+              if (r.outcome === 'accepted') {
+                document.getElementById('install-container').classList.add('hidden');
+              }
+              deferredPrompt = null;
+            });
+          });
+          
+          window.addEventListener('appinstalled', () => {
+            document.getElementById('install-container').classList.add('hidden');
+          });
+        `}} />
+      </body>
     </html>
   )
 }

@@ -114,12 +114,21 @@ const GALLERY = {
   ],
 }
 
-// Videos hover preview — agregar más propiedades conforme se generen con Veo
+// Videos hover preview — generados con Veo, comprimidos con FFmpeg
 const VIDEOS = {
-  'mismaloya-5705': '/gallery/mismaloya-5705-preview.mp4',
-  'villa-magna-253a': '/gallery/villa-magna-253a-preview.mp4',
-  'villa-magna-336': '/gallery/villa-magna-336-preview.mp4',
-  'nitta-102': '/gallery/nitta-102-preview.mp4',
+  'villa-magna-253a':  '/gallery/villa-magna-253a-preview.mp4',
+  'villa-magna-336':   '/gallery/villa-magna-336-preview.mp4',
+  'nitta-102':         '/gallery/nitta-102-preview.mp4',
+  'nitta-404':         '/gallery/nitta-404-preview.mp4',
+  'playa-royale-604':  '/gallery/playa-royale-604-preview.mp4',
+  'vestrella-502':     '/gallery/vestrella-502-preview.mp4',
+  'cielo-101':         '/gallery/cielo-101-preview.mp4',
+  'sagitario':         '/gallery/sagitario-preview.mp4',
+  'casita-1':          '/gallery/casita-1-preview.mp4',
+  'casita-2':          '/gallery/casita-2-preview.mp4',
+  'avida-408':         '/gallery/avida-408-preview.mp4',
+  'mismaloya-7202':    '/gallery/mismaloya-7202-preview.mp4',
+  'mismaloya-5705':    '/gallery/mismaloya-5705-preview.mp4',
 }
 
 const PROPERTIES = [

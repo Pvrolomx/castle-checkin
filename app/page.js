@@ -390,11 +390,6 @@ function PropertyCard({ prop, index, t, lang, onOpenGallery }) {
             />
           )}
           {/* Badges */}
-          {prop.unavailable && (
-            <div className="absolute top-2 left-2 bg-gray-800/80 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm z-10">
-              {lang === 'es' ? 'No disponible' : lang === 'fr' ? 'Non disponible' : 'Not available'}
-            </div>
-          )}
           {videoSrc && !prop.unavailable && (
             <div
               className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm z-10 flex items-center gap-1"
@@ -414,6 +409,11 @@ function PropertyCard({ prop, index, t, lang, onOpenGallery }) {
       )}
       <div className="p-5">
         <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
+        {prop.unavailable && (
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#b45309', letterSpacing: '0.1em' }}>
+            {lang === 'es' ? '— No disponible para renta' : lang === 'fr' ? '— Non disponible à la location' : '— Not available for rent'}
+          </p>
+        )}
         <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
         <div className="flex gap-4 text-sm text-gray-600">
           <span>🛏️ {prop.beds} {t.beds}</span>

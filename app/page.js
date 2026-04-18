@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 const GALLERY = {
   'villa-magna-253a': [
@@ -112,6 +112,11 @@ const GALLERY = {
     '/gallery/cielo-101-building.jpg',
     '/gallery/cielo-101-laundry.jpg',
   ],
+}
+
+// Videos hover preview — agregar más propiedades conforme se generen con Veo
+const VIDEOS = {
+  'mismaloya-5705': '/gallery/mismaloya-5705-preview.mp4',
 }
 
 const PROPERTIES = [
@@ -327,6 +332,86 @@ function GalleryModal({ images, propertyName, onClose, startIndex = 0 }) {
   )
 }
 
+// Componente de tarjeta con hover-to-video
+function PropertyCard({ prop, index, t, lang, onOpenGallery }) {
+  const [hovered, setHovered] = useState(false)
+  const videoRef = useRef(null)
+  const hasGallery = !!GALLERY[prop.id]
+  const videoSrc = VIDEOS[prop.id]
+
+  useEffect(() => {
+    if (!videoRef.current) return
+    if (hovered) {
+      videoRef.current.currentTime = 0
+      videoRef.current.play().catch(() => {})
+    } else {
+      videoRef.current.pause()
+    }
+  }, [hovered])
+
+  return (
+    <div
+      className={`property-card fade-in ${hasGallery ? 'cursor-pointer' : ''} ${prop.unavailable ? 'opacity-75' : ''}`}
+      style={{ animationDelay: `${index * 0.1}s` }}
+      onClick={() => hasGallery && onOpenGallery(prop.id, prop.name)}
+      onMouseEnter={() => videoSrc && setHovered(true)}
+      onMouseLeave={() => videoSrc && setHovered(false)}
+    >
+      {prop.photo ? (
+        <div className="property-image relative overflow-hidden" style={{ backgroundImage: `url(${prop.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          {/* Video overlay — aparece en hover con fade suave */}
+          {videoSrc && (
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                opacity: hovered ? 1 : 0,
+                transition: 'opacity 0.6s ease-in-out',
+                pointerEvents: 'none',
+              }}
+            />
+          )}
+          {/* Badges */}
+          {prop.unavailable && (
+            <div className="absolute top-2 left-2 bg-gray-800/80 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm z-10">
+              {lang === 'es' ? 'No disponible' : lang === 'fr' ? 'Non disponible' : 'Not available'}
+            </div>
+          )}
+          {videoSrc && !prop.unavailable && (
+            <div
+              className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm z-10 flex items-center gap-1"
+              style={{ opacity: hovered ? 0 : 1, transition: 'opacity 0.3s' }}
+            >
+              ▶ preview
+            </div>
+          )}
+          {hasGallery && (
+            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center gap-1 z-10">
+              📷 {GALLERY[prop.id].length} {t.photos}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
+      )}
+      <div className="p-5">
+        <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
+        <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
+        <div className="flex gap-4 text-sm text-gray-600">
+          <span>🛏️ {prop.beds} {t.beds}</span>
+          <span>🚿 {prop.baths} {t.baths}</span>
+          <span>👥 {prop.guests}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const [lang, setLang] = useState(() => { if (typeof navigator !== 'undefined') { const l = navigator.language?.slice(0,2); if (l === 'en') return 'en'; if (l === 'fr') return 'fr'; } return 'es'; })
   const [deferredPrompt, setDeferredPrompt] = useState(null)
@@ -427,47 +512,19 @@ export default function HomePage() {
             {t.properties}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PROPERTIES.map((prop, i) => {
-              const hasGallery = !!GALLERY[prop.id]
-              return (
-                <div 
-                  key={prop.id} 
-                  className={`property-card fade-in ${hasGallery ? 'cursor-pointer' : ''} ${prop.unavailable ? 'opacity-75' : ''}`}
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                  onClick={() => hasGallery && openGallery(prop.id, prop.name)}
-                >
-                  {prop.photo ? (
-                    <div className="property-image relative" style={{ backgroundImage: `url(${prop.photo})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                      {prop.unavailable && (
-                        <div className="absolute top-2 left-2 bg-gray-800/80 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
-                          {lang === 'es' ? 'No disponible' : lang === 'fr' ? 'Non disponible' : 'Not available'}
-                        </div>
-                      )}
-                      {hasGallery && (
-                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm flex items-center gap-1">
-                          📷 {GALLERY[prop.id].length} {t.photos}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="property-image"><span className="text-5xl">{prop.image}</span></div>
-                  )}
-                  <div className="p-5">
-                    <h3 className="text-xl font-semibold mb-1" style={{ fontFamily: 'Cormorant Garamond, serif' }}>{prop.name}</h3>
-                    <p className="text-gray-500 text-sm mb-3">📍 {prop.location}</p>
-                    <div className="flex gap-4 text-sm text-gray-600">
-                      <span>🛏️ {prop.beds} {t.beds}</span>
-                      <span>🚿 {prop.baths} {t.baths}</span>
-                      <span>👥 {prop.guests}</span>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+            {PROPERTIES.map((prop, i) => (
+              <PropertyCard
+                key={prop.id}
+                prop={prop}
+                index={i}
+                t={t}
+                lang={lang}
+                onOpenGallery={openGallery}
+              />
+            ))}
           </div>
         </div>
       </section>
-
 
       {/* Contact */}
       <section id="contact" className="py-16 px-4 bg-white">
@@ -586,4 +643,3 @@ export default function HomePage() {
     </div>
   )
 }
-

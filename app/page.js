@@ -390,7 +390,7 @@ function PropertyCard({ prop, index, t, lang, onOpenGallery }) {
             />
           )}
           {/* Badges */}
-          {videoSrc && !prop.unavailable && (
+          {videoSrc && (
             <div
               className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm z-10 flex items-center gap-1"
               style={{ opacity: hovered ? 0 : 1, transition: 'opacity 0.3s' }}

@@ -117,6 +117,9 @@ const GALLERY = {
 // Videos hover preview — agregar más propiedades conforme se generen con Veo
 const VIDEOS = {
   'mismaloya-5705': '/gallery/mismaloya-5705-preview.mp4',
+  'villa-magna-253a': '/gallery/villa-magna-253a-preview.mp4',
+  'villa-magna-336': '/gallery/villa-magna-336-preview.mp4',
+  'nitta-102': '/gallery/nitta-102-preview.mp4',
 }
 
 const PROPERTIES = [

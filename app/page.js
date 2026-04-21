@@ -112,6 +112,23 @@ const GALLERY = {
     '/gallery/cielo-101-building.jpg',
     '/gallery/cielo-101-laundry.jpg',
   ],
+  'sagitario': [
+    '/gallery/sagitario-01.jpg',
+    '/gallery/sagitario-02.jpg',
+    '/gallery/sagitario-03.jpg',
+    '/gallery/sagitario-04.jpg',
+    '/gallery/sagitario-05.jpg',
+    '/gallery/sagitario-06.jpg',
+    '/gallery/sagitario-07.jpg',
+    '/gallery/sagitario-08.jpg',
+    '/gallery/sagitario-09.jpg',
+    '/gallery/sagitario-10.jpg',
+    '/gallery/sagitario-11.jpg',
+    '/gallery/sagitario-12.jpg',
+    '/gallery/sagitario-13.jpg',
+    '/gallery/sagitario-14.jpg',
+    '/gallery/sagitario-15.jpg',
+  ],
 }
 
 // Videos hover preview — generados con Veo, comprimidos con FFmpeg

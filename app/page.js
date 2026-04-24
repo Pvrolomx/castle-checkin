@@ -442,7 +442,88 @@ function PropertyCard({ prop, index, t, lang, onOpenGallery }) {
   )
 }
 
+
+// ── Tutorial Modal ─────────────────────────────────────────────────────────
+function HelpModal({ lang, onClose }) {
+  const steps = {
+    es: [
+      { icon: '🏠', title: 'Selecciona tu propiedad', desc: 'En la pantalla principal encontrarás todas las propiedades de Castle Solutions. Busca la tuya y tócala.' },
+      { icon: '🔐', title: 'Ingresa tu PIN', desc: 'Cada propiedad tiene un PIN de acceso único de 4 dígitos. Tu administrador te lo proporcionó al confirmar la reservación.' },
+      { icon: '📋', title: 'Completa tu registro', desc: 'Ingresa tu nombre, apellido, correo electrónico, número de teléfono y el número de huéspedes que te acompañan.' },
+      { icon: '✅', title: 'Confirma el check-in', desc: 'Revisa que todo esté correcto y toca "Confirmar Check-in". Recibirás la información de la propiedad: WiFi, acceso, instrucciones especiales.' },
+    ],
+    en: [
+      { icon: '🏠', title: 'Select your property', desc: 'On the main screen you will find all Castle Solutions properties. Find yours and tap it.' },
+      { icon: '🔐', title: 'Enter your PIN', desc: 'Each property has a unique 4-digit access PIN. Your property manager provided it when your reservation was confirmed.' },
+      { icon: '📋', title: 'Complete your registration', desc: 'Enter your first name, last name, email address, phone number and the number of guests with you.' },
+      { icon: '✅', title: 'Confirm check-in', desc: 'Review that everything is correct and tap "Confirm Check-in". You will receive the property information: WiFi, access, special instructions.' },
+    ],
+    fr: [
+      { icon: '🏠', title: 'Sélectionnez votre propriété', desc: 'Sur l'écran principal vous trouverez toutes les propriétés de Castle Solutions. Trouvez la vôtre et appuyez dessus.' },
+      { icon: '🔐', title: 'Entrez votre PIN', desc: 'Chaque propriété a un PIN d'accès unique à 4 chiffres. Votre gestionnaire vous l'a fourni lors de la confirmation de votre réservation.' },
+      { icon: '📋', title: 'Complétez votre enregistrement', desc: 'Entrez votre prénom, nom, adresse e-mail, numéro de téléphone et le nombre d'invités qui vous accompagnent.' },
+      { icon: '✅', title: 'Confirmez le check-in', desc: 'Vérifiez que tout est correct et appuyez sur "Confirmer le Check-in". Vous recevrez les informations de la propriété: WiFi, accès, instructions spéciales.' },
+    ],
+  }
+
+  const labels = {
+    es: { title: 'Cómo Hacer tu Check-in', note: '💬 ¿Olvidaste tu PIN? Contacta a Castle Solutions por WhatsApp y te ayudamos de inmediato.', download: '📄 Descargar PDF', close: 'Cerrar' },
+    en: { title: 'How to Complete Your Check-in', note: '💬 Forgot your PIN? Contact Castle Solutions on WhatsApp and we will help you right away.', download: '📄 Download PDF', close: 'Close' },
+    fr: { title: 'Comment Effectuer Votre Check-in', note: '💬 PIN oublié? Contactez Castle Solutions sur WhatsApp et nous vous aiderons immédiatement.', download: '📄 Télécharger PDF', close: 'Fermer' },
+  }
+
+  const l = labels[lang] || labels.en
+  const s = steps[lang] || steps.en
+
+  const downloadPDF = () => {
+    const text = `CASTLE SOLUTIONS — ${l.title}\n\n` +
+      s.map((step, i) => `${i+1}. ${step.title}\n   ${step.desc}`).join('\n\n') +
+      `\n\n💬 ${l.note}\n\ncastlesolutions.mx`
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'castle-solutions-checkin-guide.txt'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  return (
+    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', backdropFilter:'blur(4px)', zIndex:200, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px' }} onClick={onClose}>
+      <div style={{ background:'white', borderRadius:'16px', maxWidth:'480px', width:'100%', maxHeight:'90vh', overflowY:'auto', boxShadow:'0 25px 50px rgba(0,0,0,0.3)' }} onClick={e => e.stopPropagation()}>
+        <div style={{ padding:'20px', borderBottom:'1px solid #f0f0f0', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <h2 style={{ margin:0, fontSize:'17px', fontWeight:600, color:'#1a1a1a' }}>🏰 {l.title}</h2>
+          <button onClick={onClose} style={{ background:'none', border:'none', fontSize:'24px', cursor:'pointer', color:'#999', lineHeight:1 }}>&times;</button>
+        </div>
+        <div style={{ padding:'20px' }}>
+          {s.map((step, i) => (
+            <div key={i} style={{ display:'flex', gap:'14px', marginBottom:'16px' }}>
+              <div style={{ flexShrink:0, width:'40px', height:'40px', background:'#dbeafe', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'20px' }}>{step.icon}</div>
+              <div>
+                <p style={{ margin:'0 0 3px 0', fontWeight:600, fontSize:'14px', color:'#1a1a1a' }}>{i+1}. {step.title}</p>
+                <p style={{ margin:0, fontSize:'13px', color:'#666', lineHeight:'1.5' }}>{step.desc}</p>
+              </div>
+            </div>
+          ))}
+          <div style={{ background:'#fffbeb', border:'1px solid #fcd34d', borderRadius:'12px', padding:'12px', fontSize:'13px', color:'#92400e', marginTop:'8px' }}>
+            {l.note}
+          </div>
+        </div>
+        <div style={{ padding:'16px 20px', borderTop:'1px solid #f0f0f0', display:'flex', gap:'10px' }}>
+          <button onClick={downloadPDF} style={{ flex:1, background:'#2563eb', color:'white', border:'none', borderRadius:'10px', padding:'10px', fontSize:'13px', fontWeight:500, cursor:'pointer' }}>
+            {l.download}
+          </button>
+          <button onClick={onClose} style={{ padding:'10px 16px', borderRadius:'10px', border:'1px solid #e5e7eb', color:'#6b7280', fontSize:'13px', cursor:'pointer', background:'white' }}>
+            {l.close}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
+  const [showHelp, setShowHelp] = useState(false)
   const [lang, setLang] = useState(() => { if (typeof navigator !== 'undefined') { const l = navigator.language?.slice(0,2); if (l === 'en') return 'en'; if (l === 'fr') return 'fr'; } return 'es'; })
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
@@ -481,6 +562,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {showHelp && <HelpModal lang={lang} onClose={() => setShowHelp(false)} />}
       {/* Gallery Modal */}
       {galleryOpen && (
         <GalleryModal
@@ -495,6 +577,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <span className="font-semibold text-gray-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>Castle Solutions</span>
           <div className="flex items-center gap-3">
+            <button onClick={() => setShowHelp(true)} style={{ width:'34px', height:'34px', borderRadius:'50%', background:'white', border:'1px solid #e5e7eb', boxShadow:'0 1px 3px rgba(0,0,0,0.1)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', fontSize:'15px' }} title="Tutorial">❓</button>
             <div className="lang-toggle">
               <button className={`lang-btn ${lang === 'es' ? 'active' : ''}`} onClick={() => setLang('es')}>🇲🇽</button>
               <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>🇺🇸</button>

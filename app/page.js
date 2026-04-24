@@ -581,7 +581,7 @@ export default function HomePage() {
             © {new Date().getFullYear()} Castle Solutions. {t.rights}.
           </p>
           <p className="text-gray-600 text-xs">
-            {t.madeWith} ❤️ {t.by} <span className="text-castle-gold">duendes.app</span> <a href="/generate" className="text-gray-600 hover:text-gray-500 transition-colors">2026</a>
+            {t.madeWith} ❤️ {t.by} <span className="text-castle-gold">La Colmena</span> <a href="/generate" className="text-gray-600 hover:text-gray-500 transition-colors">2026</a>
           </p>
         </div>
       </footer>

@@ -262,7 +262,7 @@ const TEXTS = {
     email: 'Email',
     footer: 'Puerto Vallarta, Jalisco, Mexique',
     rights: 'Tous droits réservés',
-    install: 'Installer l\'App',
+    install: "Installer l'App",
     madeWith: 'Fait avec',
     by: 'par',
     photos: 'photos',
@@ -459,9 +459,9 @@ function HelpModal({ lang, onClose }) {
       { icon: '✅', title: 'Confirm check-in', desc: 'Review that everything is correct and tap "Confirm Check-in". You will receive the property information: WiFi, access, special instructions.' },
     ],
     fr: [
-      { icon: '🏠', title: 'Sélectionnez votre propriété', desc: 'Sur l'écran principal vous trouverez toutes les propriétés de Castle Solutions. Trouvez la vôtre et appuyez dessus.' },
-      { icon: '🔐', title: 'Entrez votre PIN', desc: 'Chaque propriété a un PIN d'accès unique à 4 chiffres. Votre gestionnaire vous l'a fourni lors de la confirmation de votre réservation.' },
-      { icon: '📋', title: 'Complétez votre enregistrement', desc: 'Entrez votre prénom, nom, adresse e-mail, numéro de téléphone et le nombre d'invités qui vous accompagnent.' },
+      { icon: '🏠', title: 'Sélectionnez votre propriété', desc: "Sur l'écran principal vous trouverez toutes les propriétés de Castle Solutions. Trouvez la vôtre et appuyez dessus." },
+      { icon: '🔐', title: 'Entrez votre PIN', desc: "Chaque propriété a un PIN d'accès unique à 4 chiffres. Votre gestionnaire vous l'a fourni lors de la confirmation de votre réservation." },
+      { icon: '📋', title: 'Complétez votre enregistrement', desc: "Entrez votre prénom, nom, adresse e-mail, numéro de téléphone et le nombre d'invités qui vous accompagnent." },
       { icon: '✅', title: 'Confirmez le check-in', desc: 'Vérifiez que tout est correct et appuyez sur "Confirmer le Check-in". Vous recevrez les informations de la propriété: WiFi, accès, instructions spéciales.' },
     ],
   }

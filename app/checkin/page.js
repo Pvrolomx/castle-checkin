@@ -334,6 +334,8 @@ function CheckinForm() {
 
   // Flight lookup disabled - field kept as simple text input
 
+  const flightData = null // flight lookup disabled
+
   const getPropertySlug = (propertyName) => {
     const prop = PROPERTIES.find(p => p.name === propertyName)
     return prop ? prop.id : ''
@@ -387,7 +389,7 @@ Enviado: ${new Date().toLocaleString('es-MX')}
     `.trim()
 
     try {
-      const response = await fetch('https://email-service-pvrolomxs-projects.vercel.app/api/send', {
+      const response = await fetch('https://email.duendes.app/api/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

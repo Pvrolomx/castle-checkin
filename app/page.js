@@ -524,6 +524,15 @@ function HelpModal({ lang, onClose }) {
 
 export default function HomePage() {
   const [showHelp, setShowHelp] = useState(false)
+  const [savedGuide, setSavedGuide] = useState(null)
+
+  useEffect(() => {
+    try {
+      const url = localStorage.getItem('castle_guide_url')
+      const name = localStorage.getItem('castle_guide_name')
+      if (url && name) setSavedGuide({ url, name })
+    } catch(e) {}
+  }, [])
   const [lang, setLang] = useState(() => { if (typeof navigator !== 'undefined') { const l = navigator.language?.slice(0,2); if (l === 'en') return 'en'; if (l === 'fr') return 'fr'; } return 'es'; })
   const [deferredPrompt, setDeferredPrompt] = useState(null)
   const [showInstall, setShowInstall] = useState(false)
@@ -562,6 +571,24 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {savedGuide && (
+        <div className="mx-4 mt-4 bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3">
+          <span className="text-2xl">🏠</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-emerald-800">{savedGuide.name}</p>
+            <p className="text-xs text-emerald-600">Ya hiciste check-in — ver tu guía</p>
+          </div>
+          <div className="flex gap-2">
+            <a href={savedGuide.url}
+              className="bg-emerald-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-emerald-700 transition-colors">
+              Ver guía
+            </a>
+            <button onClick={() => { localStorage.removeItem('castle_guide_url'); localStorage.removeItem('castle_guide_name'); setSavedGuide(null) }}
+              className="text-gray-400 hover:text-gray-600 text-lg leading-none px-1">×</button>
+          </div>
+        </div>
+      )}
+
       {showHelp && <HelpModal lang={lang} onClose={() => setShowHelp(false)} />}
       {/* Gallery Modal */}
       {galleryOpen && (

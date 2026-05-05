@@ -404,6 +404,12 @@ Enviado: ${new Date().toLocaleString('es-MX')}
       const result = await response.json()
       if (result.success) {
         setStatus('success')
+    // Save guide URL so guest can return without re-checking in
+    try {
+      const guideUrl = getGuideUrl()
+      localStorage.setItem('castle_guide_url', guideUrl)
+      localStorage.setItem('castle_guide_name', formData.property)
+    } catch(e) {}
       } else {
         setStatus('error')
       }

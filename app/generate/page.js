@@ -125,6 +125,15 @@ export default function GeneratePage() {
                 >
                   {copiedId === p.id ? '✅ Copiado' : '📋 Copiar'}
                 </button>
+                <a
+                  href={`https://castle-ops.castlesolutions.mx/guide/${p.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 py-2 rounded-lg text-sm font-medium text-center transition-all hover:opacity-90"
+                  style={{ backgroundColor: '#C9A227', color: 'white' }}
+                >
+                  👁 Ver Guía
+                </a>
                 <button
                   onClick={() => handleWhatsApp(p)}
                   className="flex-1 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90"

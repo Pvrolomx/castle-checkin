@@ -13,7 +13,7 @@ const PROPERTIES = [
   { id: 'casita-1', name: 'Casita 1', pin: '1001' },
   { id: 'casita-2', name: 'Casita 2', pin: '1002' },
   { id: 'nitta-102', name: 'Nitta 102', pin: '1020' },
-  { id: 'nitta-404', name: 'Nitta 404', pin: '4040' },
+  { id: 'nitta-404', name: 'Nitta 404', pin: '5959' },
   { id: 'mismaloya-7202', name: 'Mismaloya 7202', pin: '7202' },
   { id: 'mismaloya-5705', name: 'Mismaloya 5705', pin: '5705' },
   { id: 'avida-408', name: 'Avida 408', pin: '4080' },

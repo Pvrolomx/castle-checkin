@@ -182,7 +182,7 @@ const PROPERTY_PINS = {
   'villa-magna-253a': '2531',
   'villa-magna-336': '3360',
   'nitta-102': '1020',
-  'nitta-404': '4040',
+  'nitta-404': '5959',
   'playa-royale-603': '6030',
   'playa-royale-604': '6040',
   'vestrella-502': '5020',
